@@ -4,16 +4,24 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { NavbarComponent } from './layout/navbar/navbar.component';
+import { SidebarComponent } from './layout/sidebar/sidebar.component';
+import { DashboardComponent } from './layout/dashboard/dashboard.component';
+import { JobComponent } from './core/job/job.component';
+import { InvoiceComponent } from './core/invoice/invoice.component';
+import { DeliveryChallanComponent } from './core/delivery-challan/delivery-challan.component';
+import { EstimateComponent } from './core/estimate/estimate.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     SidebarComponent,
-    DashboardComponent
+    DashboardComponent,
+    JobComponent,
+    InvoiceComponent,
+    DeliveryChallanComponent,
+    EstimateComponent,
   ],
   imports: [
     BrowserModule,
