@@ -11,6 +11,8 @@ import { JobComponent } from './core/job/job.component';
 import { InvoiceComponent } from './core/invoice/invoice.component';
 import { DeliveryChallanComponent } from './core/delivery-challan/delivery-challan.component';
 import { EstimateComponent } from './core/estimate/estimate.component';
+import { InvoiceItemComponent } from './core/invoice/invoice-item/invoice-item.component';
+import { MainviewComponent } from './layout/mainview/mainview.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { EstimateComponent } from './core/estimate/estimate.component';
     InvoiceComponent,
     DeliveryChallanComponent,
     EstimateComponent,
+    InvoiceItemComponent,
+    MainviewComponent,
   ],
   imports: [
     BrowserModule,
