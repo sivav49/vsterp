@@ -13,6 +13,7 @@ import { DeliveryChallanComponent } from './core/delivery-challan/delivery-chall
 import { EstimateComponent } from './core/estimate/estimate.component';
 import { InvoiceItemComponent } from './core/invoice/invoice-item/invoice-item.component';
 import { MainviewComponent } from './layout/mainview/mainview.component';
+import { InvoiceDetailsComponent } from './core/invoice/invoice-details/invoice-details.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { MainviewComponent } from './layout/mainview/mainview.component';
     EstimateComponent,
     InvoiceItemComponent,
     MainviewComponent,
+    InvoiceDetailsComponent,
   ],
   imports: [
     BrowserModule,
