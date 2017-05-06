@@ -20,9 +20,16 @@
       "prefix": "app",
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "../node_modules/font-awesome/css/font-awesome.css",
+        "../node_modules/animate.css/animate.min.css",
         "styles.scss"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.min.js",
+        "../node_modules/metismenu/dist/metisMenu.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+        "../vendor/pace/pace.min.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
@@ -53,6 +60,10 @@
   },
   "defaults": {
     "styleExt": "scss",
-    "component": {}
+    "component": {},
+    "serve" : {
+      "port": 4200,
+      "host": "192.168.1.104"
+    }
   }
 }

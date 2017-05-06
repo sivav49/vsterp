@@ -1,12 +1,15 @@
-.h1-mainpage {
+
+.h1-main-page {
   display: inline-block;
   padding-right: 5px;
 }
+
 .btn-add-item {
   position: relative;
   top: -3px;
 }
-hr{
+
+hr {
   margin-top: 2px;
   margin-bottom: 2px;
 }
@@ -27,11 +30,29 @@ hr{
   white-space: nowrap;
 }
 
+//Invoice List
+.table > thead > tr > td.active,
+.table > tbody > tr > td.active,
+.table > tfoot > tr > td.active,
+.table > thead > tr > th.active,
+.table > tbody > tr > th.active,
+.table > tfoot > tr > th.active,
+.table > thead > tr.active > td,
+.table > tbody > tr.active > td,
+.table > tfoot > tr.active > td,
+.table > thead > tr.active > th,
+.table > tbody > tr.active > th,
+.table > tfoot > tr.active > th {
+  color: #fff;
+  background-color: #0073AA;
+}
+
 .data-table {
   background: #fff;
   border: 1px solid #ddd;
 }
-.thead-inverse{
+
+.thead-inverse {
   color: #fff;
   background-color: #23282D;
 }
@@ -39,18 +60,23 @@ hr{
 .bill-no {
   min-width: 70px;
 }
+
 .bill-date {
   min-width: 110px;
 }
+
 .bill-amount {
   min-width: 100px;
 }
+
 .bill-vat {
   min-width: 70px;
 }
+
 .bill-total {
   min-width: 100px;
 }
+
 .data-currency {
   text-align: right;
 }
@@ -59,4 +85,10 @@ thead {
   & .bill-amount, & .bill-vat, & .bill-total {
     text-align: center;
   }
+}
+
+//Invoice Details
+
+.preserve-format {
+  white-space: pre;
 }

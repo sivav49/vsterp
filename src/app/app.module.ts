@@ -4,35 +4,34 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './layout/navbar/navbar.component';
-import { SidebarComponent } from './layout/sidebar/sidebar.component';
-import { DashboardComponent } from './layout/dashboard/dashboard.component';
+import { DashboardComponent } from './view/dashboard/dashboard.component';
 import { JobComponent } from './core/job/job.component';
 import { InvoiceComponent } from './core/invoice/invoice.component';
 import { DeliveryChallanComponent } from './core/delivery-challan/delivery-challan.component';
 import { EstimateComponent } from './core/estimate/estimate.component';
-import { InvoiceItemComponent } from './core/invoice/invoice-item/invoice-item.component';
-import { MainviewComponent } from './layout/mainview/mainview.component';
-import { InvoiceDetailsComponent } from './core/invoice/invoice-details/invoice-details.component';
+import { BasicLayoutComponent } from './view/basic-layout/basic-layout.component';
+import {RouterModule} from '@angular/router';
+import {ROUTES} from './app.routes';
+import { SideNavComponent } from './view/side-nav/side-nav.component';
+import { TopNavComponent } from './view/top-nav/top-nav.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
-    SidebarComponent,
     DashboardComponent,
     JobComponent,
     InvoiceComponent,
     DeliveryChallanComponent,
     EstimateComponent,
-    InvoiceItemComponent,
-    MainviewComponent,
-    InvoiceDetailsComponent,
+    BasicLayoutComponent,
+    SideNavComponent,
+    TopNavComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    RouterModule.forRoot(ROUTES)
   ],
   providers: [],
   bootstrap: [AppComponent]
