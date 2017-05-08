@@ -5,7 +5,7 @@ export class Invoice {
               public clientName: string,
               public clientAddress: string,
               public clientTIN: string,
-              public generalDescription: string,
+              public description: string,
               public isHideQtyRate: boolean,
               public invoiceItem: Array<InvoiceItem>,
               public amount: number,

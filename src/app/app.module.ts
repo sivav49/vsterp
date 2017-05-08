@@ -14,6 +14,7 @@ import {RouterModule} from '@angular/router';
 import {ROUTES} from './app.routes';
 import { SideNavComponent } from './view/side-nav/side-nav.component';
 import { TopNavComponent } from './view/top-nav/top-nav.component';
+import { InvoiceEditorComponent } from './core/invoice/invoice-editor/invoice-editor.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { TopNavComponent } from './view/top-nav/top-nav.component';
     BasicLayoutComponent,
     SideNavComponent,
     TopNavComponent,
+    InvoiceEditorComponent,
   ],
   imports: [
     BrowserModule,

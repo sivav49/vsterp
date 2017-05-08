@@ -15,8 +15,7 @@ export class BasicLayoutComponent implements OnInit {
     detectBody();
   }
 
-  @HostListener('window:resize')
-  onResize() {
+  @HostListener('window:resize') onResize() {
     detectBody();
   }
 }

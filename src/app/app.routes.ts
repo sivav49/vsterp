@@ -1,17 +1,16 @@
 import {Routes} from '@angular/router';
 import {BasicLayoutComponent} from './view/basic-layout/basic-layout.component';
-import {DashboardComponent} from './view/dashboard/dashboard.component';
-/**
- * Created by sivarajan on 6/5/17.
- */
-
+import {InvoiceComponent} from './core/invoice/invoice.component';
+import {InvoiceEditorComponent} from './core/invoice/invoice-editor/invoice-editor.component';
 
 export const ROUTES: Routes = [
-  {path: '', redirectTo: 'starterView', pathMatch: 'full'},
+  {path: '', redirectTo: 'invoice', pathMatch: 'full'},
   {
     path: '', component: BasicLayoutComponent,
     children: [
-      {path: 'starterView', component: DashboardComponent}
+      {path: 'invoice', component: InvoiceComponent},
+      {path: 'invoice-editor', component: InvoiceEditorComponent}
     ]
   }
+
 ];
