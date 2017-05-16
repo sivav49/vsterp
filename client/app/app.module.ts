@@ -15,6 +15,8 @@ import {ROUTES} from './app.routes';
 import { SideNavComponent } from './view/side-nav/side-nav.component';
 import { TopNavComponent } from './view/top-nav/top-nav.component';
 import { InvoiceEditorComponent } from './core/invoice/invoice-editor/invoice-editor.component';
+import { InvoiceListingComponent } from './core/invoice/invoice-listing/invoice-listing.component';
+import { PageNotFoundComponent } from './view/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { InvoiceEditorComponent } from './core/invoice/invoice-editor/invoice-ed
     SideNavComponent,
     TopNavComponent,
     InvoiceEditorComponent,
+    InvoiceListingComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
