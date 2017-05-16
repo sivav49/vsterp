@@ -1,5 +1,7 @@
 export class Invoice {
-  constructor(public no: number,
+  constructor(
+              public _id: number,
+              public no: number,
               public dcNo: number,
               public date: Date,
               public clientName: string,
