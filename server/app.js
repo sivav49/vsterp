@@ -7,7 +7,9 @@ let mongoose = require('mongoose');
 
 let app = express();
 
-mongoose.connect('localhost:27017/vsterpdb');
+mongoose.connect('mongodb://localhost/vsterpdb');
+let db = mongoose.connection;
+
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -22,6 +24,11 @@ if (app.get("env") === "production") {
   // catch 404 and forward to error handler
   app.get('*', function (req, res) {
     res.sendFile('index.html', {root: path.join(__dirname, "../dist")});
+  });
+} else {
+  db.on('error', console.error.bind(console, 'db connection error:'));
+  db.once('open', function() {
+    console.log("db connected");
   });
 }
 
