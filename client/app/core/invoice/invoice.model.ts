@@ -1,4 +1,7 @@
 export class Invoice {
+  public amount: number;
+  public vatAmount: number;
+  public grandTotal: number;
   constructor(
               public _id: number,
               public no: number,
@@ -9,17 +12,14 @@ export class Invoice {
               public clientTIN: string,
               public description: string,
               public isHideQtyRate: boolean,
-              public invoiceItem: Array<InvoiceItem>,
-              public amount: number,
-              public vatPercent: number,
-              public vatAmount: number,
-              public grandTotal: number) {}
+              public invoiceItems: InvoiceItem[],
+              public vatPercent: number) {}
 }
 
 export class InvoiceItem {
+  public amount: number;
   constructor(public no: number,
               public description: string,
               public quantity: number,
-              public unitPrice: number,
-              public amount: number) {}
+              public unitPrice: number) {}
 }
