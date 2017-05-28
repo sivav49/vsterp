@@ -7,9 +7,8 @@ let mongoose = require('mongoose');
 
 let app = express();
 
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/vsterpdb');
-let db = mongoose.connection;
-
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -18,19 +17,28 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 if (app.get("env") === "production") {
-
-  // in production mode run application from dist folder
   app.use(express.static(path.join(__dirname, "../dist")));
-  // catch 404 and forward to error handler
   app.get('*', function (req, res) {
     res.sendFile('index.html', {root: path.join(__dirname, "../dist")});
   });
 } else {
-  db.on('error', console.error.bind(console, 'db connection error:'));
-  db.once('open', function() {
-    console.log("db connected");
+  app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://192.168.1.104:4200');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
   });
+
+  let db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'db connection error:'));
+  db.once('open', console.log.bind(console, 'db connected'));
 }
+
+let router = express.Router();
+router.use('/invoice', require('./api/invoice/invoice.controller'));
+router.use('/client', require('./api/client/client.controller'));
+app.use('/api', router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

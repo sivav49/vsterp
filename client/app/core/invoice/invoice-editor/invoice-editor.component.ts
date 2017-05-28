@@ -2,24 +2,30 @@ import {Component, OnInit} from '@angular/core';
 import {Invoice} from '../invoice.model';
 import {InvoiceService} from '../invoice.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, FormArray} from '@angular/forms';
+import {FormBuilder, FormGroup, FormArray, Validators, AbstractControl} from '@angular/forms';
+import {CustomValidators} from '../../../shared/CustomValidators';
+import * as moment from 'moment';
+import {DecimalPipe} from '@angular/common';
+import {LOCALE_ID} from '@angular/core';
 
 @Component({
   selector: 'app-invoice-editor',
   templateUrl: './invoice-editor.component.html',
-  styleUrls: ['./invoice-editor.component.scss']
+  styleUrls: ['./invoice-editor.component.scss'],
+  providers: [DecimalPipe,
+    {provide: LOCALE_ID, useValue: 'en-IN'}]
 })
 export class InvoiceEditorComponent implements OnInit {
-  invoice: Invoice;
-  invoiceForm: FormGroup;
-  private invoiceAmount: number;
-  private invoiceVATAmount: number;
-  private invoiceGrandTotal: number;
+  public invoiceNo = '';
+  public invoice: Invoice;
+  public invoiceForm: FormGroup;
+  private errorMessage: any;
 
   constructor(private invoiceService: InvoiceService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private decimalPipe: DecimalPipe) {
     this.createForm();
   }
 
@@ -27,105 +33,146 @@ export class InvoiceEditorComponent implements OnInit {
     this.activatedRoute.params
       .subscribe(
         (params) => {
-          this.invoice = this.invoiceService.getInvoice(params['id']);
-          this.setInvoiceForm(this.invoice);
+          this.invoiceService.getInvoice(params['id'])
+            .subscribe(
+              invoice => {
+                this.invoice = invoice;
+                this.invoiceNo = this.invoice.no.toFixed(0);
+                this.setInvoiceForm(this.invoice);
+              },
+              error => {
+                if (error.status === 404) {
+                  this.router.navigate(['404']);
+                }
+              }
+            );
         }
       );
   }
 
   onSubmit() {
-
+    console.log('submit isFormValid' + this.invoiceForm.status);
   }
 
   private createForm() {
     this.invoiceForm = this.fb.group({
-      no: '',
+      no: ['', [Validators.required]],
       dcNo: '',
-      date: '',
+      date: ['', [Validators.required, CustomValidators.date]],
       clientName: '',
       clientAddress: '',
       clientTIN: '',
       description: '',
       invoiceItems: this.fb.array([]),
+      amount: '',
       vatAmount: '',
       grandTotal: ''
     });
+    this.invoiceForm.get('no').disable();
+    this.invoiceForm.get('amount').disable();
+    this.invoiceForm.get('vatAmount').disable();
+    this.invoiceForm.get('grandTotal').disable();
   }
 
   get invoiceItems(): FormArray {
     return this.invoiceForm.get('invoiceItems') as FormArray;
   };
 
+  formatNumber(number: Number) {
+    return this.decimalPipe.transform(number, '1.2-2');
+  }
+
+  private updateAllAmount() {
+    const itemFGs = this.invoiceForm.get('invoiceItems') as FormArray;
+    for (const item of itemFGs.controls) {
+      this.updateItemAmount(item);
+    }
+    this.updateInvoiceAmount();
+  }
+
+  private updateItemAmount(itemFormGroup: AbstractControl) {
+    const quantity = itemFormGroup.get('quantity').value;
+    const unitPrice = itemFormGroup.get('unitPrice').value;
+    const itemAmount = quantity * unitPrice;
+    itemFormGroup.get('itemAmount').setValue(this.formatNumber(itemAmount));
+  }
+
+  private updateInvoiceAmount() {
+    const itemFGs = this.invoiceForm.get('invoiceItems') as FormArray;
+    let amount = 0;
+    for (const item of itemFGs.controls) {
+      const qty = item.get('quantity').value;
+      const rate = item.get('unitPrice').value;
+      amount += qty * rate;
+    }
+    const vatAmount = amount * 0.05;
+    const grandTotal = amount + vatAmount;
+    this.invoiceForm.get('amount').setValue(this.formatNumber(amount));
+    this.invoiceForm.get('vatAmount').setValue(this.formatNumber(vatAmount));
+    this.invoiceForm.get('grandTotal').setValue(this.formatNumber(grandTotal));
+  }
+
+  private createItemFormGroup(item?) {
+    item = item || {};
+    const itemFG = this.fb.group({
+      description: item.description || '',
+      quantity: item.quantity || '',
+      unitPrice: item.unitPrice || '',
+      itemAmount: 0
+    });
+    this.updateItemAmount(itemFG);
+    itemFG.get('quantity').valueChanges.subscribe(
+      () => {
+        this.updateItemAmount(itemFG);
+        this.updateInvoiceAmount();
+      }
+    );
+    itemFG.get('unitPrice').valueChanges.subscribe(
+      () => {
+        this.updateItemAmount(itemFG);
+        this.updateInvoiceAmount();
+      }
+    );
+    itemFG.get('itemAmount').disable();
+    return itemFG;
+  }
+
   private setInvoiceForm(invoice: Invoice) {
-    const invoiceItemFGs = invoice.invoiceItems.map(() => this.fb.group({
-      description: '',
-      quantity: '',
-      unitPrice: '',
-    }));
+    const invoiceItemFGs = invoice.items.map(() => this.createItemFormGroup());
     const invoiceItemFormArray = this.fb.array(invoiceItemFGs);
     this.invoiceForm.setControl('invoiceItems', invoiceItemFormArray);
 
     this.invoiceForm.setValue({
       no: invoice.no,
       dcNo: invoice.dcNo || '',
-      date: invoice.date,
+      date: moment(invoice.date).format('DD-MM-YYYY'),
       clientName: invoice.clientName,
-      clientAddress: invoice.clientAddress,
-      clientTIN: invoice.clientTIN,
-      description: invoice.description,
-      vatAmount: invoice.vatAmount || 0,
-      grandTotal: invoice.grandTotal || 0,
-      invoiceItems: invoice.invoiceItems.map(item => {
+      clientAddress: invoice.clientAddress || '',
+      clientTIN: invoice.clientTIN || '',
+      description: invoice.description || '',
+      invoiceItems: invoice.items.map(item => {
         return {
-          description: item.description,
+          description: item.description || '',
           quantity: item.quantity,
           unitPrice: item.unitPrice,
+          itemAmount: 0
         };
-      })
+      }),
+      amount: 0,
+      vatAmount: 0,
+      grandTotal: 0
     });
-  }
-
-  computeInvoiceItemAmount(i: number): number {
-    const invoiceItem = this.invoiceForm.value.invoiceItems[i];
-    return invoiceItem.quantity * invoiceItem.unitPrice;
-  }
-
-  computeInvoiceAmount(): number {
-    let i, amount = 0;
-    const length = this.invoiceForm.value.invoiceItems.length;
-    for (i = 0; i < length; i++) {
-      const invoiceItem = this.invoiceForm.value.invoiceItems[i];
-      amount += invoiceItem.quantity * invoiceItem.unitPrice;
-    }
-    this.invoiceAmount = amount;
-    return this.invoiceAmount;
-  }
-
-  computeVATAmount(): number {
-    this.invoiceVATAmount = this.invoiceAmount * 0.05;
-    return this.invoiceVATAmount;
-  }
-
-  computeGrandTotal(): number {
-    this.invoiceGrandTotal = this.invoiceAmount + this.invoiceVATAmount;
-    return this.invoiceGrandTotal;
+    this.updateAllAmount();
   }
 
   onAddInvoiceItem(i: number): void {
-    this.invoiceItems.insert(i + 1, this.fb.group({
-      description: '',
-      quantity: '',
-      unitPrice: '',
-    }));
+    this.invoiceItems.insert(i + 1, this.createItemFormGroup());
   }
 
   onDuplicateInvoiceItem(i: number): void {
-    const invoiceItem = this.invoiceItems.at(i).value;
-    this.invoiceItems.insert(i + 1, this.fb.group({
-      description: invoiceItem.description,
-      quantity: invoiceItem.quantity,
-      unitPrice: invoiceItem.unitPrice,
-    }));
+    const item = this.invoiceItems.at(i).value;
+    this.invoiceItems.insert(i + 1, this.createItemFormGroup(item));
+    this.updateInvoiceAmount();
   }
 
   onDeleteInvoiceItem(i: number): void {
@@ -133,6 +180,7 @@ export class InvoiceEditorComponent implements OnInit {
     if (this.invoiceItems.length === 0) {
       this.onAddInvoiceItem(0);
     }
+    this.updateInvoiceAmount();
   }
 
   backToInvoiceList() {
@@ -140,12 +188,10 @@ export class InvoiceEditorComponent implements OnInit {
   }
 
   nextInvoice() {
-    this.invoiceService.activateNextInvoice();
     this.navigateToInvoice(this.invoiceService.getActiveInvoice()._id);
   }
 
   prevInvoice() {
-    this.invoiceService.activatePrevInvoice();
     this.navigateToInvoice(this.invoiceService.getActiveInvoice()._id);
   }
 

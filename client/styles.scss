@@ -1,2 +1,57 @@
 /* Import main Inspinia style */
 @import "assets/styles/style";
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
+.wrapper-content {
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+}
+
+.table > thead > tr > td.active,
+.table > tbody > tr > td.active,
+.table > tfoot > tr > td.active,
+.table > thead > tr > th.active,
+.table > tbody > tr > th.active,
+.table > tfoot > tr > th.active,
+.table > thead > tr.active > td,
+.table > tbody > tr.active > td,
+.table > tfoot > tr.active > td,
+.table > thead > tr.active > th,
+.table > tbody > tr.active > th,
+.table > tfoot > tr.active > th {
+  color: #fff;
+  background-color: #1ab394 !important;
+}
+
+.table.data-table tbody > tr {
+  cursor: pointer;
+}
+
+.h1-main-page {
+  display: inline-block;
+  padding-right: 5px;
+}
+
+.btn-add-item {
+  position: relative;
+  top: -3px;
+}
+
+hr {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.preserve-format {
+  white-space: pre;
+}

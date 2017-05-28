@@ -1,15 +1,13 @@
 <div class="col-lg-7">
   <div class="mail-box-header">
     <h2>
-      View Invoice
+      View Invoice {{invoiceNo == '' ? '' : '('+invoiceNo+')'}}
     </h2>
     <div class="mail-tools tooltip-demo m-t-md">
       <div class="btn-group" role="group" aria-label="toolbox">
         <button type="button" class="btn btn-white"><span class="fa fa-copy"></span>
-          Duplicate
         </button>
         <button type="button" class="btn btn-white"><span class="fa fa-pencil"></span>
-          Edit
         </button>
       </div>
       <div class="btn-group pull-right" role="group" aria-label="navigation">
@@ -104,7 +102,7 @@
                 <div class="col-sm-2 col-xs-4">
                   <div class="form-group text-right">
                     <label class="control-label" for="{{ 'item' + i + 'Quantity'}}">Quantity</label>
-                    <input type="text" id="{{ 'item' + i + 'Quantity'}}"
+                    <input type="number" id="{{ 'item' + i + 'Quantity'}}"
                            formControlName="quantity"
                            class="form-control text-right">
                   </div>
@@ -112,7 +110,7 @@
                 <div class="col-sm-2 col-xs-4 xs-clear-padding-left">
                   <div class="form-group text-right">
                     <label class="control-label" for="{{ 'item' + i + 'UnitPrice'}}">Unit Price</label>
-                    <input type="text" id="{{ 'item' + i + 'UnitPrice'}}"
+                    <input type="number" id="{{ 'item' + i + 'UnitPrice'}}"
                            formControlName="unitPrice"
                            class="form-control text-right">
                   </div>
@@ -121,8 +119,7 @@
                   <div class="form-group text-right">
                     <label class="control-label" for="{{ 'item' + i + 'Amount'}}">Amount</label>
                     <input type="text" id="{{ 'item' + i + 'Amount'}}"
-                           [value]="computeInvoiceItemAmount(i) | number:'1.2-2'"
-                           [readonly]="true"
+                           formControlName="itemAmount"
                            class="form-control text-right">
                   </div>
                 </div>
@@ -141,13 +138,15 @@
             <hr>
           </ng-container>
         </ng-container>
-        <div class="form-horizontal col-sm-6 col-sm-push-6">
+        <div class="col-sm-6">
+          <button type="submit" [disabled]="!invoiceForm.valid" class="btn btn-primary">Save Invoice</button>
+        </div>
+        <div class="form-horizontal col-sm-6">
           <div class="form-group text-right">
             <label class="col-sm-6 control-label" for="amount">Total Amount</label>
             <div class="col-sm-6">
               <input type="text" id="amount"
-                     [value]="computeInvoiceAmount() | number:'1.2-2'"
-                     [readonly]="true"
+                     formControlName="amount"
                      class="form-control text-right">
             </div>
           </div>
@@ -155,8 +154,7 @@
             <label class="col-sm-6 control-label" for="vatAmount">VAT @ 5%</label>
             <div class="col-sm-6">
               <input type="text" id="vatAmount"
-                     [value]="computeVATAmount() | number:'1.2-2'"
-                     [readonly]="true"
+                     formControlName="vatAmount"
                      class="form-control text-right">
             </div>
           </div>
@@ -164,8 +162,7 @@
             <label class="col-sm-6 control-label" for="grandTotal">Grand Total</label>
             <div class="col-sm-6">
               <input type="text" id="grandTotal"
-                     [value]="computeGrandTotal() | number:'1.2-2'"
-                     [readonly]="true"
+                     formControlName="grandTotal"
                      class="form-control text-right">
             </div>
           </div>

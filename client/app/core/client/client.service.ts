@@ -5,13 +5,11 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import {Invoice} from './invoice.model';
+import {Client} from './client.model';
 
 @Injectable()
-export class InvoiceService {
-  private apiUrl = 'http://192.168.1.104:4300/api/invoice';
-
-  private activeInvoice: Invoice;
+export class ClientService {
+  private apiUrl = 'http://192.168.1.104:4300/api/client';
 
   private static extractData(res: Response) {
     const body = res.json();
@@ -33,32 +31,21 @@ export class InvoiceService {
   constructor(private http: Http) {
   }
 
-  getInvoiceList(): Observable<Invoice[]> {
+  getAll(): Observable<Client[]> {
     return this.http.get(this.apiUrl).map(
       (res) => {
-        const invoices = InvoiceService.extractData(res);
-        this.activeInvoice = invoices[0];
-        return invoices;
+        const clients = ClientService.extractData(res);
+        return clients;
       })
-      .catch(InvoiceService.handleError);
+      .catch(ClientService.handleError);
   }
 
-  getInvoice(index: number): Observable<Invoice> {
+  getClient(index: number): Observable<Client> {
     return this.http.get(this.apiUrl + '/' + index).map(
       (res) => {
-        const invoice = InvoiceService.extractData(res);
-        this.activeInvoice = invoice;
-        return invoice;
+        const client = ClientService.extractData(res);
+        return client;
       })
-      .catch(InvoiceService.handleError);
+      .catch(ClientService.handleError);
   }
-
-  getActiveInvoice(): Invoice {
-    return this.activeInvoice;
-  }
-
-  setActiveInvoice(invoice: Invoice) {
-    this.activeInvoice = invoice;
-  }
-
 }

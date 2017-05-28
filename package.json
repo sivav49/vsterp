@@ -31,6 +31,7 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "metismenu": "^2.7.0",
+    "moment": "^2.18.1",
     "mongoose": "^4.9.9",
     "mongoose-unique-validator": "^1.0.5",
     "morgan": "^1.8.1",

@@ -18,6 +18,9 @@ import { TopNavComponent } from './view/top-nav/top-nav.component';
 import { InvoiceEditorComponent } from './core/invoice/invoice-editor/invoice-editor.component';
 import { InvoiceListingComponent } from './core/invoice/invoice-listing/invoice-listing.component';
 import { PageNotFoundComponent } from './view/page-not-found/page-not-found.component';
+import { ClientComponent } from './core/client/client.component';
+import { ClientEditorComponent } from './core/client/client-editor/client-editor.component';
+import { ClientListingComponent } from './core/client/client-listing/client-listing.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,9 @@ import { PageNotFoundComponent } from './view/page-not-found/page-not-found.comp
     InvoiceEditorComponent,
     InvoiceListingComponent,
     PageNotFoundComponent,
+    ClientComponent,
+    ClientEditorComponent,
+    ClientListingComponent,
   ],
   imports: [
     BrowserModule,
