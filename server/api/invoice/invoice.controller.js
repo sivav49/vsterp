@@ -1,96 +1,82 @@
-let express = require('express');
-let router = express.Router();
+let {Invoice, getModelFromRequest} = require('./invoice.model');
 
-let Invoice = require('./invoice.model');
-
-router.get('/', getAll);
-router.get('/:no', getById);
-router.post('/', create);
-router.put('/:no', update);
-router.patch('/:no', update);
-router.delete('/:no', destroy);
-
-module.exports = router;
-
-function getAll(req, res) {
-  Invoice.find({}).sort({no: -1}).limit(15)
-    .then(sendJson(res), errorHandler(res));
+function load(req, res, next, invoiceNo) {
+  Invoice.get(invoiceNo)
+    .then((data) => {
+      req.invoice = data;
+      return next();
+    })
+    .catch(e => next(e));
 }
 
-function getById(req, res) {
-  Invoice.findOne({no: req.params.no})
-    .then(sendJson(res), errorHandler(res));
+function get(req, res) {
+  return submitJson(res, req.invoice);
 }
 
-function create(req, res) {
-  let reqModel = getModelFromRequestBody(req);
-  Invoice.getNextBillNo().then(
+function create(req, res, next) {
+  const invoice = getModelFromRequest(req);
+  Invoice.getNextInvoiceNo().then(
     (no) => {
-      reqModel.no = no;
-      let invoice = new Invoice(reqModel);
+      invoice.no = no;
       invoice.save()
-        .then(sendJson(res, 201), errorHandler(res));
+        .then(data => submitJson(res, data))
+        .catch(e => next(e));
     }
-  );
+  ).catch(e => next(e));
 }
 
-function update(req, res) {
-  let reqModel = getModelFromRequestBody(req);
-  let no = req.params.no;
-  delete reqModel.no;
-  Invoice.findOneAndUpdate({no: no}, reqModel, {new: true})
-    .then(sendJson(res), errorHandler(res));
+function update(req, res, next) {
+  const invoice = getModelFromRequest(req);
+  invoice.save()
+    .then(data => submitJson(res, data))
+    .catch(e => next(e));
 }
 
-function destroy(req, res) {
-  let no = req.params.no;
-  Invoice.findOneAndRemove({no: no})
-    .then(sendJson(res), errorHandler(res));
+function list(req, res, next) {
+  const {limit = 15, skip = 0} = req.query;
+  Invoice.list({limit, skip})
+    .then(data => submitJson(res, data))
+    .catch(e => next(e));
 }
 
-function getModelFromRequestBody(req) {
-  let body = req.body;
-  let items = [];
-  let i, length = body.items.length;
-  for (i = 0; i < length; i++) {
-    let item = body.items[i];
-    items.push({
-      no: item.no,
-      description: item.description,
-      quantity: item.quantity,
-      rate: item.rate
-    });
-  }
-  return {
-    no: body.no,
-    clientName: body.clientName,
-    clientAddress: body.clientAddress,
-    clientTIN: body.clientTIN,
-    dcNo: body.dcNo,
-    date: Date.parse(body.date),
-    description: body.description,
-    items: items,
-    vatPercent: body.vatPercent,
-    hideQtyRate: body.hideQtyRate
-  }
+function remove(req, res, next) {
+  const invoice = req.invoice;
+  invoice.remove()
+    .then(data => submitJson(res, data))
+    .catch(e => next(e));
 }
 
-function sendJson(res, successStatus) {
-  successStatus = successStatus || 200;
-  return function (data) {
-    if (data === null) {
-      res.sendStatus(404);
-    } else {
-      res.status(successStatus).json({
-        message: "success",
-        data: data
-      });
-    }
-  }
+// function destroy(req, res) {
+//   let no = req.params.no;
+//   Invoice.findOneAndRemove({no: no})
+//     .then(sendJson(res), errorHandler(res));
+// }
+
+// function sendJson(res, successStatus) {
+//   successStatus = successStatus || 200;
+//   return function (data) {
+//     if (data === null) {
+//       res.sendStatus(404);
+//     } else {
+//       res.status(successStatus).json({
+//         message: "success",
+//         data: data
+//       });
+//     }
+//   }
+// }
+//
+// function errorHandler(res, data) {
+//   return function (err) {
+//     res.status(500).send("Error occurred " + err);
+//   }
+// }
+
+function submitJson(res, data) {
+  return res.json({
+    message: 'success',
+    data: data
+  });
 }
 
-function errorHandler(res, data) {
-  return function (err) {
-    res.status(500).send("Error occurred " + err);
-  }
-}
+module.exports = {load, get, create, update, list, remove};
