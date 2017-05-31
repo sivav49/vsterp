@@ -41,7 +41,8 @@ export class ClientEditorComponent implements OnInit {
 
   private createForm() {
     this.clientForm = this.fb.group({
-      cName: ['', Validators.required],
+      name: ['', Validators.required],
+      nickName: ['', Validators.required],
       addrl1: ['', Validators.required],
       addrl2: '',
       state: '',
@@ -51,11 +52,13 @@ export class ClientEditorComponent implements OnInit {
       phone: '',
       tin: '',
     });
+    this.clientForm.get('nickName').disable();
   }
 
   private setForm(client: Client) {
     this.clientForm.setValue({
-      cName: client.cName,
+      name: client.name,
+      nickName: client._id,
       addrl1: client.addrl1,
       addrl2: client.addrl2,
       state: client.state,

@@ -9,7 +9,7 @@ import {Invoice} from './invoice.model';
 
 @Injectable()
 export class InvoiceService {
-  private apiUrl = 'http://192.168.1.104:4300/api/invoice';
+  private apiUrl = 'http://192.168.1.104:4300/api/invoices';
 
   private activeInvoice: Invoice;
 

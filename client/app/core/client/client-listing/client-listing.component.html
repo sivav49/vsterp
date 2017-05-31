@@ -9,10 +9,10 @@
           <button type="button" class="btn btn-white">New</button>
         </div>
         <div class="btn-group " role="group" aria-label="">
-          <button type="button" class="btn btn-white" (click)="viewDetails()">
+          <button type="button" class="btn btn-white" (click)="navigateView()">
             <span class="fa fa-eye"></span>
           </button>
-          <button type="button" class="btn btn-white" (click)="viewDetails()">
+          <button type="button" class="btn btn-white" (click)="navigateEdit()">
             <span class="fa fa-pencil"></span>
           </button>
           <button type="button" class="btn btn-white" (click)="viewDetails()">
@@ -42,8 +42,9 @@
       <tbody>
       <tr *ngFor="let client of clientList"
           (click)="activeClient = client"
+          (dblclick)="navigateView()"
           [ngClass]="{active: client == activeClient}">
-        <td>{{client.cName}}</td>
+        <td>{{client.name}}</td>
         <td>{{client.phone}}</td>
         <td>{{client.email}}</td>
       </tr>

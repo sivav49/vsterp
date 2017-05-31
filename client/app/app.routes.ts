@@ -8,14 +8,16 @@ import {PageNotFoundComponent} from './view/page-not-found/page-not-found.compon
 import {ClientComponent} from './core/client/client.component';
 import {ClientListingComponent} from './core/client/client-listing/client-listing.component';
 import {ClientEditorComponent} from './core/client/client-editor/client-editor.component';
+import {ClientDetailsComponent} from './core/client/client-details/client-details.component';
+import {ClientServiceResolve} from './core/client/client.service';
 
 export const ROUTES: Routes = [
-  {path: '', redirectTo: 'client', pathMatch: 'full'},
+  {path: '', redirectTo: 'clients', pathMatch: 'full'},
   {
     path: '', component: BasicLayoutComponent,
     children: [
       {
-        path: 'invoice', component: InvoiceComponent,
+        path: 'invoices', component: InvoiceComponent,
         children: [
           {path: '', component: InvoiceListingComponent},
           {path: ':id', component: InvoiceEditorComponent}
@@ -24,10 +26,17 @@ export const ROUTES: Routes = [
       {path: 'dc', component: DashboardComponent},
       {path: 'jobs', component: DashboardComponent},
       {
-        path: 'client', component: ClientComponent,
+        path: 'clients', component: ClientComponent,
         children: [
           {path: '', component: ClientListingComponent},
-          {path: ':id', component: ClientEditorComponent}
+          {path: 'edit/:id', component: ClientEditorComponent},
+          {
+            path: ':id',
+            component: ClientDetailsComponent,
+            resolve: {
+              client: ClientServiceResolve
+            }
+          }
         ]
       },
     ]

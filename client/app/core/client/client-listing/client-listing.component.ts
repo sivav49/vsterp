@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Client} from '../client.model';
 import {ClientService} from '../client.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-client-listing',
@@ -13,7 +14,9 @@ export class ClientListingComponent implements OnInit {
   public activeClient: Client;
   public errorMessage: any;
 
-  constructor(private clientService: ClientService) {
+  constructor(private clientService: ClientService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -25,6 +28,14 @@ export class ClientListingComponent implements OnInit {
         },
         error => this.errorMessage = <any>error
       );
+  }
+
+  navigateView() {
+    this.router.navigate([this.activeClient._id], {relativeTo: this.activatedRoute});
+  }
+
+  navigateEdit() {
+    this.router.navigate(['edit', this.activeClient._id], {relativeTo: this.activatedRoute});
   }
 
 }

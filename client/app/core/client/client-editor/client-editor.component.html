@@ -5,20 +5,8 @@
     </h2>
     <div class="mail-tools tooltip-demo m-t-md">
       <div class="btn-group" role="group" aria-label="toolbox">
-        <button type="button" class="btn btn-white"><span class="fa fa-copy"></span>
-        </button>
-        <button type="button" class="btn btn-white"><span class="fa fa-pencil"></span>
-        </button>
-      </div>
-      <div class="btn-group pull-right" role="group" aria-label="navigation">
-        <button class="btn btn-white" [routerLink]="['/client']">
-          <span class="fa fa-bars"></span>
-        </button>
-        <button class="btn btn-white">
-          <i class="fa fa-arrow-up"></i>
-        </button>
-        <button class="btn btn-white">
-          <i class="fa fa-arrow-down"></i>
+        <button type="button" class="btn btn-white" [routerLink]="['/clients']" >
+          <span class="fa fa-arrow-left"> Back</span>
         </button>
       </div>
     </div>
@@ -29,9 +17,15 @@
       <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="col-sm-6">
           <div class="form-group">
-            <label class="control-label" for="cName">Company Name</label>
-            <input type="text" id="cName"
-                   formControlName="cName"
+            <label class="control-label" for="name">Company Name</label>
+            <input type="text" id="name"
+                   formControlName="name"
+                   class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="nickName">Nick Name</label>
+            <input type="text" id="nickName"
+                   formControlName="nickName"
                    class="form-control">
           </div>
           <div class="form-group">
@@ -76,13 +70,13 @@
                    formControlName="tin"
                    class="form-control">
           </div>
-        </div>
-        <hr>
-        <div class="col-sm-6">
-          <button type="submit" [disabled]="!clientForm.valid" class="btn btn-primary">Save Invoice</button>
+          <button type="submit" [disabled]="!clientForm.valid" class="btn btn-primary pull-right">Save</button>
+          <div>
+
+          </div>
         </div>
       </form>
-      <p>{{clientForm.value | json}}</p>
+      <div class="clearfix"></div>
     </div>
   </div>
 </div>

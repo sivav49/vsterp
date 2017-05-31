@@ -21,6 +21,8 @@ import { PageNotFoundComponent } from './view/page-not-found/page-not-found.comp
 import { ClientComponent } from './core/client/client.component';
 import { ClientEditorComponent } from './core/client/client-editor/client-editor.component';
 import { ClientListingComponent } from './core/client/client-listing/client-listing.component';
+import { ClientDetailsComponent } from './core/client/client-details/client-details.component';
+import {ClientService, ClientServiceResolve} from './core/client/client.service';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import { ClientListingComponent } from './core/client/client-listing/client-list
     ClientComponent,
     ClientEditorComponent,
     ClientListingComponent,
+    ClientDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,7 @@ import { ClientListingComponent } from './core/client/client-listing/client-list
     HttpModule,
     RouterModule.forRoot(ROUTES)
   ],
-  providers: [],
+  providers: [ClientService, ClientServiceResolve],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

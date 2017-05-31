@@ -184,7 +184,7 @@ export class InvoiceEditorComponent implements OnInit {
   }
 
   backToInvoiceList() {
-    this.router.navigate(['invoice']);
+    this.router.navigate(['invoices']);
   }
 
   nextInvoice() {

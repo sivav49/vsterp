@@ -6,10 +6,11 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 import {Client} from './client.model';
+import {ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot} from '@angular/router';
 
 @Injectable()
 export class ClientService {
-  private apiUrl = 'http://192.168.1.104:4300/api/client';
+  private apiUrl = 'http://192.168.1.104:4300/api/clients';
 
   private static extractData(res: Response) {
     const body = res.json();
@@ -40,12 +41,35 @@ export class ClientService {
       .catch(ClientService.handleError);
   }
 
-  getClient(index: number): Observable<Client> {
-    return this.http.get(this.apiUrl + '/' + index).map(
+  getClient(_id: number): Observable<Client> {
+    return this.http.get(this.apiUrl + '/' + _id).map(
       (res) => {
         const client = ClientService.extractData(res);
         return client;
       })
       .catch(ClientService.handleError);
   }
+}
+
+@Injectable()
+export class ClientServiceResolve implements Resolve<Client> {
+
+  constructor(private router: Router,
+              private clientService: ClientService) {
+  }
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Client | Observable<Client> | Promise<Client> {
+    const clientId = route.params['id'];
+    return this.clientService.getClient(clientId).map(
+      client => {
+        if (client) {
+          return client;
+        } else {
+          this.router.navigate(['404']);
+          return client;
+        }
+      }
+    );
+  }
+
 }
