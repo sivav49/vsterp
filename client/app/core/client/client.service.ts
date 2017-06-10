@@ -9,23 +9,11 @@ import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/switch';
 
-import {Modal, TwoButtonPreset} from 'angular2-modal/plugins/bootstrap';
 import {ToastsManager} from 'ng2-toastr';
-import {DialogRef} from 'angular2-modal';
 
 import {Client} from './client.model';
+import {PopupService, ConfirmationResult} from '../../shared/popup.service';
 
-export enum PopupResult {
-  Ok,
-  Cancel
-}
-
-export class ConfirmationResult<T> {
-
-  constructor(public popupResult: PopupResult,
-              public data: T) {
-  }
-}
 
 @Injectable()
 export class ClientService {
@@ -78,8 +66,8 @@ export class ClientService {
   }
 
   constructor(private http: Http,
-              private modal: Modal,
-              private toastr: ToastsManager) {
+              private toastr: ToastsManager,
+              private popup: PopupService<Client>) {
   }
 
   getAll(): Observable<Client[]> {
@@ -113,33 +101,18 @@ export class ClientService {
   }
 
   deleteConfirmation(clientId: string): Observable<ConfirmationResult<Client>> {
-    return this.deletePopup(clientId)
-      .map((result) => {
-        if (result === PopupResult.Ok) {
+    return this.popup.deleteConfirmation(clientId)
+      .map((popup) => {
+        if (popup.isOkay()) {
           return this.delete(clientId)
-            .map((client) => new ConfirmationResult(result, client));
+            .map((client) => {
+              popup.data = client;
+              return popup;
+            });
         } else {
-          return Observable.create((obj) => obj.next(new ConfirmationResult(PopupResult.Cancel, null)));
+          return Observable.create((obj) => obj.next(popup));
         }
       }).switch();
-  }
-
-  deletePopup(clientId): Observable<PopupResult> {
-    return Observable.fromPromise(this.modal.confirm()
-      .size('sm')
-      .isBlocking(true)
-      .showClose(true)
-      .keyboard(27)
-      .title('Delete Client Confirmation')
-      .body('<p>Are you sure you want to delete?</p><p>' + clientId + '</p>')
-      .okBtn('Delete')
-      .okBtnClass('btn btn-danger')
-      .open()
-      .catch(err => alert('ERROR'))
-      .then((dialog: DialogRef<TwoButtonPreset>) => dialog.result)
-      .then(() => PopupResult.Ok)
-      .catch(() => PopupResult.Cancel)
-    );
   }
 
   private handleResponse(apiCall: Observable<Response>, successMessage: string, errorMessage: string) {

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {Client} from '../client.model';
-import {ClientService, ConfirmationResult, PopupResult} from '../client.service';
+import {ClientService} from '../client.service';
 
 @Component({
   selector: 'app-client-listing',
@@ -39,8 +39,8 @@ export class ClientListingComponent implements OnInit {
   deleteClient() {
     this.clientService.deleteConfirmation(this.clientService.activeClient._id)
       .subscribe(
-        (result: ConfirmationResult<Client>) => {
-          if (result.popupResult === PopupResult.Ok) {
+        (result) => {
+          if (result.isOkay()) {
             this.reload();
           }
         }

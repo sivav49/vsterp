@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Location} from '@angular/common';
 import {Client} from '../client.model';
-import {ClientService, ConfirmationResult, PopupResult} from '../client.service';
+import {ClientService} from '../client.service';
 
 @Component({
   selector: 'app-client-details',
@@ -14,7 +15,8 @@ export class ClientDetailsComponent implements OnInit {
 
   constructor(private router: Router,
               private clientService: ClientService,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private location: Location) {
   }
 
   ngOnInit() {
@@ -25,8 +27,12 @@ export class ClientDetailsComponent implements OnInit {
       });
   }
 
+  navigateBack() {
+    this.location.back();
+  }
+
   navigateList() {
-    this.router.navigate(['../'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['clients']);
   }
 
   navigateEdit() {
@@ -36,8 +42,8 @@ export class ClientDetailsComponent implements OnInit {
   deleteClient() {
     this.clientService.deleteConfirmation(this.clientService.activeClient._id)
       .subscribe(
-        (result: ConfirmationResult<Client>) => {
-          if (result.popupResult === PopupResult.Ok) {
+        (result) => {
+          if (result.isOkay()) {
             this.navigateList();
           }
         }

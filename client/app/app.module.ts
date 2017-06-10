@@ -28,6 +28,7 @@ import { ClientEditorComponent } from './core/client/client-editor/client-editor
 import { ClientListingComponent } from './core/client/client-listing/client-listing.component';
 import { ClientDetailsComponent } from './core/client/client-details/client-details.component';
 import { ClientService, ClientGetResolve, ClientGetAllResolve } from './core/client/client.service';
+import {PopupService} from './shared/popup.service';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { ClientService, ClientGetResolve, ClientGetAllResolve } from './core/cli
   ],
   providers: [ClientService,
     ClientGetResolve,
-    ClientGetAllResolve],
+    ClientGetAllResolve,
+    PopupService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

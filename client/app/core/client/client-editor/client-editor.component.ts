@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Location} from '@angular/common';
 
 import {Client} from '../client.model';
 import {ClientService} from '../client.service';
@@ -42,6 +43,7 @@ export class ClientEditorComponent implements OnInit {
   constructor(private clientService: ClientService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
+              private location: Location,
               private fb: FormBuilder) {
     this.createForm();
   }
@@ -115,7 +117,11 @@ export class ClientEditorComponent implements OnInit {
     );
   }
 
+  navigateBack() {
+    this.location.back();
+  }
+
   navigateList() {
-    this.router.navigate(['../'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['clients']);
   }
 }
