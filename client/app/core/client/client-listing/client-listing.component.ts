@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Client} from '../client.model';
-import {ClientService} from '../client.service';
 import {ActivatedRoute, Router} from '@angular/router';
+
+import {Client} from '../client.model';
+import {ClientService, ConfirmationResult, PopupResult} from '../client.service';
 
 @Component({
   selector: 'app-client-listing',
@@ -10,32 +11,54 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class ClientListingComponent implements OnInit {
 
+  public loaded = false;
   public clientList: Client[];
-  public activeClient: Client;
   public errorMessage: any;
 
-  constructor(private clientService: ClientService,
+  constructor(public clientService: ClientService,
               private router: Router,
               private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
+    this.reload();
+  }
+
+  navigateCreate() {
+    this.router.navigate(['create'], {relativeTo: this.activatedRoute});
+  }
+
+  navigateView() {
+    this.router.navigate([this.clientService.activeClient._id], {relativeTo: this.activatedRoute});
+  }
+
+  navigateEdit() {
+    this.router.navigate([this.clientService.activeClient._id, 'edit'], {relativeTo: this.activatedRoute});
+  }
+
+  deleteClient() {
+    this.clientService.deleteConfirmation(this.clientService.activeClient._id)
+      .subscribe(
+        (result: ConfirmationResult<Client>) => {
+          if (result.popupResult === PopupResult.Ok) {
+            this.reload();
+          }
+        }
+      );
+  }
+
+  private reload() {
+    this.loaded = false;
     this.clientService.getAll()
       .subscribe(
-        (data) => {
-          this.clientList = data;
-          this.activeClient = this.clientList[0];
+        (clients) => {
+          this.clientList = clients;
+          if (!this.clientService.activeClient || !ClientService.hasClient(this.clientList, this.clientService.activeClient)) {
+            this.clientService.activeClient = this.clientList[0];
+          }
+          this.loaded = true;
         },
         error => this.errorMessage = <any>error
       );
   }
-
-  navigateView() {
-    this.router.navigate([this.activeClient._id], {relativeTo: this.activatedRoute});
-  }
-
-  navigateEdit() {
-    this.router.navigate(['edit', this.activeClient._id], {relativeTo: this.activatedRoute});
-  }
-
 }

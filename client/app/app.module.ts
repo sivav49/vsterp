@@ -1,8 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ReactiveFormsModule } from '@angular/forms';
+
+import { ToastModule } from 'ng2-toastr';
+import { ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './view/dashboard/dashboard.component';
@@ -22,7 +27,7 @@ import { ClientComponent } from './core/client/client.component';
 import { ClientEditorComponent } from './core/client/client-editor/client-editor.component';
 import { ClientListingComponent } from './core/client/client-listing/client-listing.component';
 import { ClientDetailsComponent } from './core/client/client-details/client-details.component';
-import {ClientService, ClientServiceResolve} from './core/client/client.service';
+import { ClientService, ClientGetResolve, ClientGetAllResolve } from './core/client/client.service';
 
 @NgModule({
   declarations: [
@@ -45,12 +50,18 @@ import {ClientService, ClientServiceResolve} from './core/client/client.service'
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES)
+    RouterModule.forRoot(ROUTES),
+    ToastModule.forRoot(),
+    ModalModule.forRoot(),
+    BootstrapModalModule
   ],
-  providers: [ClientService, ClientServiceResolve],
+  providers: [ClientService,
+    ClientGetResolve,
+    ClientGetAllResolve],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

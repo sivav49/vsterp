@@ -37,7 +37,7 @@ app.use(helmet());
 app.use('/api', apiRoutes);
 
 if (config.env === 'development') {
-
+  app.options('*', cors());
 } else {
   app.use(express.static(path.join(__dirname, "../dist")));
   app.get('*', function (req, res) {
@@ -72,10 +72,13 @@ app.use((req, res, next) => {
 // error handler, send stacktrace only during development
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(err.status).json({
-      message: err.isPublic ? err.message : httpStatus[err.status],
-      //stack: config.env === 'development' ? err.stack : {}
-    })
+    let resObj = {
+      message: err.message
+    };
+    if (config.env !== 'development') {
+      resObj.message = err.isPublic ? err.message : httpStatus[err.status];
+    }
+    res.status(err.status).json(resObj);
   }
 );
 

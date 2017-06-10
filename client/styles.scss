@@ -73,3 +73,7 @@ hr {
 input[type='number'] {
   text-align: right;
 }
+
+modal-overlay {
+  z-index: 3000 !important;
+}

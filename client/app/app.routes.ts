@@ -9,34 +9,54 @@ import {ClientComponent} from './core/client/client.component';
 import {ClientListingComponent} from './core/client/client-listing/client-listing.component';
 import {ClientEditorComponent} from './core/client/client-editor/client-editor.component';
 import {ClientDetailsComponent} from './core/client/client-details/client-details.component';
-import {ClientServiceResolve} from './core/client/client.service';
+import {ClientGetResolve} from './core/client/client.service';
 
 export const ROUTES: Routes = [
-  {path: '', redirectTo: 'clients', pathMatch: 'full'},
+  {
+    path: '', redirectTo: 'clients', pathMatch: 'full'
+  },
   {
     path: '', component: BasicLayoutComponent,
     children: [
       {
         path: 'invoices', component: InvoiceComponent,
         children: [
-          {path: '', component: InvoiceListingComponent},
-          {path: ':id', component: InvoiceEditorComponent}
+          {
+            path: '', component: InvoiceListingComponent
+          },
+          {
+            path: ':id', component: InvoiceEditorComponent
+          }
         ]
       },
-      {path: 'dc', component: DashboardComponent},
-      {path: 'jobs', component: DashboardComponent},
+      {
+        path: 'dc', component: DashboardComponent
+      },
+      {
+        path: 'jobs', component: DashboardComponent
+      },
       {
         path: 'clients', component: ClientComponent,
         children: [
-          {path: '', component: ClientListingComponent},
-          {path: 'edit/:id', component: ClientEditorComponent},
           {
+            path: '',
+            component: ClientListingComponent,
+          }, {
+            path: 'create',
+            component: ClientEditorComponent
+          }, {
             path: ':id',
             component: ClientDetailsComponent,
             resolve: {
-              client: ClientServiceResolve
+              client: ClientGetResolve
             }
-          }
+          }, {
+            path: ':id/edit',
+            component: ClientEditorComponent,
+            resolve: {
+              client: ClientGetResolve
+            }
+          },
         ]
       },
     ]
