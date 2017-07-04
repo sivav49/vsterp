@@ -1,4 +1,4 @@
-export class Invoice {
+export class InvoiceVat {
   public amount: number;
   public vatAmount: number;
   public grandTotal: number;
@@ -10,12 +10,12 @@ export class Invoice {
               public clientAddress: string,
               public clientTIN: string,
               public description: string,
-              public items: InvoiceItem[],
+              public items: InvoiceVatItem[],
               public vatPercent: number) {
   }
 }
 
-export class InvoiceItem {
+export class InvoiceVatItem {
   public amount: number;
 
   constructor(public no: number,

@@ -1,0 +1,31 @@
+
+//Invoice List
+.bill-no {
+  min-width: 70px;
+}
+
+.bill-date {
+  min-width: 110px;
+}
+
+.bill-amount {
+  min-width: 100px;
+}
+
+.bill-vat {
+  min-width: 70px;
+}
+
+.bill-total {
+  min-width: 100px;
+}
+
+.data-currency {
+  text-align: right;
+}
+
+thead {
+  & .bill-amount, & .bill-vat, & .bill-total {
+    text-align: center;
+  }
+}

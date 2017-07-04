@@ -4,13 +4,13 @@ import {FormBuilder, FormGroup, FormArray, Validators, AbstractControl} from '@a
 import {Location, DecimalPipe} from '@angular/common';
 import {LOCALE_ID} from '@angular/core';
 import * as moment from 'moment';
-
-import {CustomValidators} from '../../../shared/CustomValidators';
-
-import {Invoice} from '../invoice.model';
-import {InvoiceService} from '../invoice.service';
 import {Observable} from 'rxjs/Observable';
-import {InvoicePreviewTaxComponent} from '../invoice-preview-tax/invoice-preview-tax.component';
+
+import {CustomValidators} from '../../../../shared/CustomValidators';
+
+import {InvoiceVat} from '../invoice-vat.model';
+import {InvoiceVatService} from '../invoice-vat.service';
+import {InvoiceVatPrintComponent} from '../invoice-vat-print/invoice-vat-print.component';
 
 enum EditorMode {
   None,
@@ -22,25 +22,26 @@ enum EditorMode {
 const defaultVAT = 5;
 
 @Component({
-  selector: 'app-invoice-editor',
-  templateUrl: './invoice-editor.component.html',
-  styleUrls: ['./invoice-editor.component.scss'],
+  selector: 'app-invoice-vat-editor',
+  templateUrl: './invoice-vat-editor.component.html',
+  styleUrls: ['./invoice-vat-editor.component.scss'],
   providers: [DecimalPipe,
     {provide: LOCALE_ID, useValue: 'en-IN'}]
 })
-export class InvoiceEditorComponent implements OnInit {
+export class InvoiceVatEditorComponent implements OnInit {
   // @ViewChild('previewvat') preview: InvoicePreviewComponent;
-  @ViewChild('previewtax') preview: InvoicePreviewTaxComponent;
+  @ViewChild('previewtax') preview: InvoiceVatPrintComponent;
 
   private mode = EditorMode.None;
 
   public invoiceForm: FormGroup;
   private errorMessage: any;
 
-  constructor(public invoiceService: InvoiceService,
+  constructor(public invoiceService: InvoiceVatService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private fb: FormBuilder,
+              private location: Location,
               private decimalPipe: DecimalPipe) {
     this.createForm();
   }
@@ -59,7 +60,7 @@ export class InvoiceEditorComponent implements OnInit {
   }
 
   onSubmit() {
-    let serviceCall: Observable<Invoice>;
+    let serviceCall: Observable<InvoiceVat>;
     const invoice = this.invoiceForm.value;
     invoice.vatPercent = invoice.isVAT ? defaultVAT : 0;
     if (this.mode === EditorMode.Create) {
@@ -112,6 +113,10 @@ export class InvoiceEditorComponent implements OnInit {
   get items(): FormArray {
     return this.invoiceForm.get('items') as FormArray;
   };
+
+  formatNumber(number: Number) {
+    return this.decimalPipe.transform(number, '1.2-2');
+  }
 
   onAddInvoiceItem(i: number): void {
     this.items.insert(i + 1, this.createItemFormGroup());
@@ -205,11 +210,10 @@ export class InvoiceEditorComponent implements OnInit {
         this.updateInvoiceAmount();
       }
     );
-    // itemFG.get('amount').disable();
     return itemFG;
   }
 
-  private setInvoiceForm(invoice: Invoice) {
+  private setInvoiceForm(invoice: InvoiceVat) {
     const invoiceItemFGs = invoice.items.map(() => this.createItemFormGroup());
     const invoiceItemFormArray = this.fb.array(invoiceItemFGs);
     this.invoiceForm.setControl('items', invoiceItemFormArray);

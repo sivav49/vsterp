@@ -40,7 +40,7 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   deleteClient() {
-    this.clientService.deleteConfirmation(this.clientService.activeClient._id)
+    this.clientService.removeConfirmation(this.clientService.activeClient._id)
       .subscribe(
         (result) => {
           if (result.isOkay()) {

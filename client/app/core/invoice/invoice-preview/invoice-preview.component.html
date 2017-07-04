@@ -1,0 +1,139 @@
+<div style="display: none">
+  <div class="col-lg-6 invoice-preview" id="invoice-preview">
+    <div class="row">
+      <div class="col-xs-8">
+        <div class="row">
+          <div class="col-xs-6">
+            <h3><b>Billed To</b></h3>
+            <p class="client-address">{{invoice.clientAddress}}</p>
+          </div>
+          <div class="col-xs-6">
+            <h3><b>Shipped To</b></h3>
+            <p class="client-address">{{invoice.clientAddress}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="invoice-details col-xs-4 text-right">
+        <h2 class="invoice-heading">Tax Invoice</h2>
+        <h3><b>ORIGINAL INVOICE</b></h3>
+        <div class="invoice-no-title">
+          Bill No: &nbsp;<span class="invoice-no">{{invoice._id}}</span>
+        </div>
+        <div class="invoice-date-title">
+          Date: &nbsp;<span class="invoice-date">{{invoice.date}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <table class="invoice-item">
+      <colgroup></colgroup>
+      <colgroup style="width: 60%;"></colgroup>
+      <colgroup style="width: 10%;"></colgroup>
+      <colgroup style="width: 15%;"></colgroup>
+      <colgroup style="width: 15%;"></colgroup>
+      <thead>
+      <tr>
+        <th colspan="2" class="item-desc">DESCRIPTION</th>
+        <th class="item-qty">QTY</th>
+        <th class="item-rate">RATE</th>
+        <th class="item-total">AMOUNT</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let invoiceItem of invoice.items; let i = index;">
+        <td class="item-sno">{{(i + 1) + ". "}}</td>
+        <td class="item-desc">
+          <h3 class="item-name">{{getTitlePart(invoiceItem)}}</h3>
+          <p>{{getDescriptionPart(invoiceItem)}}</p>
+        </td>
+        <td class="item-qty">
+          {{invoiceItem.quantity}}
+        </td>
+        <td class="item-rate currency">{{invoiceItem.unitPrice}}</td>
+        <td class="item-total currency">{{invoiceItem.amount}}</td>
+      </tr>
+      <tr>
+        <td class="spacing-cell"></td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td rowspan="4" colspan="2" class="invoice-add-details">
+          <p class="vat-exclude-title">Schedule IV Part-B, Item NO.11 Commodity code - 711</p>
+          <p class="vat-exclude-desc">Description: Books, Reading books,Text books Exempted from VAT under TNVAT ACT</p>
+          <p class="amount-word-title">Amount chargeable (in words)</p>
+          <p class="amount-word">{{getNumberText(invoice.grandTotal)}}</p>
+          <p class="eoe">E & OE</p>
+        </td>
+        <td colspan="2" class="sub-total-title"><p>SUB-TOTAL</p></td>
+        <td class="sub-total currency">{{invoice.amount}}</td>
+      </tr>
+      <tr>
+        <td colspan="2" class="vat-title"><p>TAX: VAT 5%</p></td>
+        <td class="vat currency">{{invoice.vatAmount}}</td>
+      </tr>
+      <tr>
+        <td colspan="2" class="rounding-title"><p>ROUNDING</p></td>
+        <td class="rounding currency">0.00</td>
+      </tr>
+      <tr class="grand-total-row">
+        <td colspan="2" class="grand-total-title">GRAND TOTAL</td>
+        <td class="grand-total currency">{{invoice.grandTotal}}</td>
+      </tr>
+      </tfoot>
+    </table>
+    <div class="row">
+      <table class="invoice-footer">
+        <colgroup style="width: 55%"></colgroup>
+        <colgroup style="width: 45%"></colgroup>
+        <tr>
+          <td class="payment-details">
+            <b>COMPANY DETAILS</b>
+            <table style="width: 100%;">
+              <colgroup style="width: 30%;"></colgroup>
+              <colgroup style="width: 70%;"></colgroup>
+              <tbody>
+              <tr>
+                <td>Account Name:</td>
+                <td>VST Associated Graphics Pvt. Ltd.</td>
+              </tr>
+              <tr>
+                <td>Account Number:</td>
+                <td>410700050900021</td>
+              </tr>
+              <tr>
+                <td>Bank:</td>
+                <td>Tamilnad Mercantile Bank</td>
+              </tr>
+              <tr>
+                <td>Branch:</td>
+                <td>Nerkundram</td>
+              </tr>
+              <tr>
+                <td>IFS Code:</td>
+                <td>TMBL0000410</td>
+              </tr>
+              <tr>
+                <td>PAN:</td>
+                <td>AABCV 2833J</td>
+              </tr>
+              <tr>
+                <td>TIN:</td>
+                <td>33231380566</td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+          <td class="signature">
+            <p class="text-center">For <b>VST ASSOCIATED GRAPHICS PRIVATE LIMITED</b></p>
+            <br>
+            <hr>
+            <p class="name text-center">S.M. VEDHACHALAM</p>
+            <p class="designation text-center">Managing Director</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <button class="btn btn-primary" (click)="print()">Print</button>
+</div>

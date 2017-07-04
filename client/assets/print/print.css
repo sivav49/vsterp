@@ -1,0 +1,21 @@
+@page  {
+  margin: 25mm 15mm 30mm 25mm;
+  size: A4;
+}
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  html, body { height: auto; }
+}
+
+body {
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+h3, h4, h5 {
+  margin-top: 5px;
+  font-weight: 600;
+}

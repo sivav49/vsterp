@@ -11,8 +11,10 @@ import {Observable} from 'rxjs/Observable';
 enum EditorMode {
   None,
   Create,
+  View,
   Edit
 }
+
 
 @Component({
   selector: 'app-client-editor',
@@ -24,7 +26,6 @@ export class ClientEditorComponent implements OnInit {
   private editorMode = EditorMode.None;
 
   public clientForm: FormGroup;
-
 
   private static getEditorMode(url) {
     let editorMode = EditorMode.None;

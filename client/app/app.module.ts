@@ -28,7 +28,16 @@ import { ClientEditorComponent } from './core/client/client-editor/client-editor
 import { ClientListingComponent } from './core/client/client-listing/client-listing.component';
 import { ClientDetailsComponent } from './core/client/client-details/client-details.component';
 import { ClientService, ClientGetResolve, ClientGetAllResolve } from './core/client/client.service';
-import {PopupService} from './shared/popup.service';
+import { PopupService } from './shared/popup.service';
+import { InvoiceGetResolve, InvoiceService } from './core/invoice/invoice.service';
+import { InvoicePreviewComponent } from './core/invoice/invoice-preview/invoice-preview.component';
+import { FormattedReadonlyNumberComponent } from './shared/formatted-readonly-number-component';
+import { InvoicePreviewTaxComponent } from './core/invoice/invoice-preview-tax/invoice-preview-tax.component';
+import { InvoiceVatComponent } from './core/invoice/vat/invoice-vat.component';
+import { InvoiceVatListComponent } from './core/invoice/vat/invoice-vat-list/invoice-vat-list.component';
+import { InvoiceVatEditorComponent } from './core/invoice/vat/invoice-vat-editor/invoice-vat-editor.component';
+import { InvoiceVatPrintComponent } from './core/invoice/vat/invoice-vat-print/invoice-vat-print.component';
+import {InvoiceVatGetResolve, InvoiceVatService} from './core/invoice/vat/invoice-vat.service';
 
 @NgModule({
   declarations: [
@@ -48,6 +57,13 @@ import {PopupService} from './shared/popup.service';
     ClientEditorComponent,
     ClientListingComponent,
     ClientDetailsComponent,
+    InvoicePreviewComponent,
+    FormattedReadonlyNumberComponent,
+    InvoicePreviewTaxComponent,
+    InvoiceVatComponent,
+    InvoiceVatListComponent,
+    InvoiceVatEditorComponent,
+    InvoiceVatPrintComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,6 +79,10 @@ import {PopupService} from './shared/popup.service';
   providers: [ClientService,
     ClientGetResolve,
     ClientGetAllResolve,
+    InvoiceService,
+    InvoiceGetResolve,
+    InvoiceVatService,
+    InvoiceVatGetResolve,
     PopupService],
   bootstrap: [AppComponent]
 })

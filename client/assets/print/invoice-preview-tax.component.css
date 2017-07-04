@@ -1,0 +1,264 @@
+body {
+  font-size: 11px;
+}
+
+p {
+  font-size: 11px;
+}
+
+h3 {
+  font-size: 13px;
+  margin-bottom: 5px;
+  margin-top: 0;
+}
+.pad-0 {
+  padding: 0;
+}
+.client-details {
+  float: left;
+  /*width: 430px;*/
+  padding: 0;
+}
+
+.client-details p {
+  margin-bottom: 0;
+}
+.client-details .client-address, .supplier-details .supplier-address {
+  white-space: pre;
+}
+
+.invoice-details {
+  font-size: 11px;
+  /*width: 213px;*/
+  /*float: right;*/
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+.invoice-details h2.invoice-heading {
+  font-size: 17px;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.invoice-details h3 {
+  font-size: 14px;
+  letter-spacing: 0.7px;
+  margin-top: 0;
+  margin-bottom: 3px;
+}
+
+.invoice-details table {
+  font-size: 13px;
+  float: right;
+  font-weight: bold;
+}
+
+.invoice-item {
+  margin-bottom: 25px;
+  margin-top: 20px;
+}
+
+.invoice-item thead th, .invoice-item tbody td {
+  border: 1px solid black;
+}
+
+.invoice-item thead {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.invoice-item thead th {
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.invoice-item thead .item-desc {
+  text-align: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.invoice-item tbody .item-gst {
+  text-align: right;
+  padding-top: 15px;
+  vertical-align: top;
+  line-height: 1.1;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.item-gst-percent {
+  font-size: 13px;
+}
+
+.invoice-item tbody {
+  border-bottom: 1px solid black;
+}
+
+.invoice-item tbody td {
+  border-bottom: 0;
+  border-top: 0;
+}
+
+.invoice-item tbody td.item-sno {
+  padding-left: 10px;
+  font-weight: bold;
+  border-right: 0;
+}
+
+.invoice-item tbody .item-desc {
+  border-left: 0;
+  padding: 15px 10px 10px 5px;
+}
+
+.invoice-item tbody .item-value {
+  font-size: 13px;
+}
+
+.invoice-item .item-qty, .invoice-item .item-rate, .invoice-item .item-total {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.invoice-item tbody .item-hsn, .invoice-item tbody .item-sno, .invoice-item tbody .item-qty, .invoice-item tbody .item-rate, .invoice-item tbody .item-total {
+  text-align: right;
+  padding-top: 15px;
+  vertical-align: top;
+  line-height: 1.1;
+}
+
+.invoice-item thead .item-hsn, .invoice-item tbody .item-hsn {
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.invoice-item .spacing-cell {
+  border-right: 0;
+}
+
+.invoice-item tbody .sub-total-row td {
+  border-top: 1px solid black;
+  vertical-align: middle;
+  padding-top: 0;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.invoice-item tbody .sub-total-row td.item-desc {
+  padding-top: 10px;
+}
+
+.invoice-item tbody p {
+  margin: 0;
+  white-space: pre;
+}
+
+.invoice-item tfoot .title,
+.invoice-item tfoot .amount{
+  padding: 5px 10px 0 10px;
+}
+.invoice-item tfoot .gst-component, .invoice-item tfoot .gst-component-title{
+  vertical-align: bottom;
+}
+.invoice-item tfoot .sub-total-title,
+.invoice-item tfoot .sub-total,
+.invoice-item tfoot .gst-title,
+.invoice-item tfoot .gst,
+.invoice-item tfoot .grand-total-title,
+.invoice-item tfoot .grand-total {
+  font-weight: bold;
+}
+
+.invoice-item tfoot .sub-total,
+.invoice-item tfoot .gst,
+.invoice-item tfoot .grand-total {
+  font-size: 15px;
+}
+
+.invoice-item tfoot .gst-component {
+  font-size: 13px;
+}
+
+.invoice-item tfoot .invoice-add-details {
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-right: 25px;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.invoice-item tfoot .invoice-add-details .vat-exclude-title, .invoice-item tfoot .invoice-add-details .amount-word-title {
+  margin-bottom: 0;
+}
+.invoice-item tfoot .invoice-add-details {
+  vertical-align: top;
+}
+
+.invoice-item tfoot .invoice-add-details .vat-exclude-desc {
+  margin-bottom: 15px;
+}
+
+.invoice-item tfoot .invoice-add-details .amount-word {
+  font-weight: bold;
+}
+
+.invoice-item tfoot .bank-details tbody {
+  border: 0;
+}
+
+.invoice-item tfoot .bank-details-td {
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  border-top: 0;
+  border-left: 1px solid black;
+  padding-left: 20px;
+  vertical-align: top;
+}
+
+.invoice-item tfoot .bank-details td {
+  border: 0;
+}
+
+.invoice-item .currency {
+  text-align: right;
+}
+
+.invoice-footer {
+  width: 100%;
+  font-size: 11px;
+}
+
+.invoice-footer .supplier-details {
+  vertical-align: top;
+}
+
+.invoice-footer .signature {
+  padding-left: 15px;
+}
+
+.invoice-footer .signature hr {
+  width: 230px;
+  border-top: 1px solid black;
+  margin-bottom: 15px;
+  margin-top: 30px;
+}
+
+.invoice-footer .signature .name {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+.invoice-footer .signature .eoe-spacing {
+  width: 35px;
+  height: 10px;
+  float: left;
+}
+.invoice-footer .signature .eoe {
+  font-weight: bold;
+  float: right;
+}

@@ -37,7 +37,7 @@ export class ClientListingComponent implements OnInit {
   }
 
   deleteClient() {
-    this.clientService.deleteConfirmation(this.clientService.activeClient._id)
+    this.clientService.removeConfirmation(this.clientService.activeClient._id)
       .subscribe(
         (result) => {
           if (result.isOkay()) {
@@ -53,7 +53,7 @@ export class ClientListingComponent implements OnInit {
       .subscribe(
         (clients) => {
           this.clientList = clients;
-          if (!this.clientService.activeClient || !ClientService.hasClient(this.clientList, this.clientService.activeClient)) {
+          if (!this.clientService.activeClient || this.clientList.findIndex(x => x._id === this.clientService.activeClient._id) === -1) {
             this.clientService.activeClient = this.clientList[0];
           }
           this.loaded = true;

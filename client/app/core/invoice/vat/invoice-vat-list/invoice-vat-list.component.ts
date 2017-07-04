@@ -1,19 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {InvoiceService} from '../invoice.service';
-import {Invoice} from '../invoice.model';
+import {InvoiceVatService} from '../invoice-vat.service';
+import {InvoiceVat} from '../invoice-vat.model';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
-  selector: 'app-invoice-listing',
-  templateUrl: './invoice-listing.component.html',
-  styleUrls: ['./invoice-listing.component.scss']
+  selector: 'app-invoice-list',
+  templateUrl: './invoice-vat-list.component.html',
+  styleUrls: ['./invoice-vat-list.component.scss']
 })
-export class InvoiceListingComponent implements OnInit {
+export class InvoiceVatListComponent implements OnInit {
   public loaded = false;
-  public invoiceList: Invoice[];
+  public invoiceList: InvoiceVat[];
   private errorMessage: any;
 
-  constructor(private invoiceService: InvoiceService,
+  constructor(private invoiceService: InvoiceVatService,
               private router: Router,
               private activatedRoute: ActivatedRoute) {
   }

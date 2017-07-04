@@ -95,16 +95,16 @@ export class ClientService {
     return this.handleResponse(request, 'updated successfully', 'An error occurred');
   }
 
-  delete(_id: string): Observable<Client> {
+  remove(_id: string): Observable<Client> {
     const request = this.http.delete(this.apiUrl + '/' + _id);
     return this.handleResponse(request, 'deleted successfully', 'An Error occurred');
   }
 
-  deleteConfirmation(clientId: string): Observable<ConfirmationResult<Client>> {
+  removeConfirmation(clientId: string): Observable<ConfirmationResult<Client>> {
     return this.popup.deleteConfirmation(clientId)
       .map((popup) => {
         if (popup.isOkay()) {
-          return this.delete(clientId)
+          return this.remove(clientId)
             .map((client) => {
               popup.data = client;
               return popup;

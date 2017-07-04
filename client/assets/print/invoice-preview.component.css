@@ -1,0 +1,195 @@
+p {
+  font-size: 11px;
+}
+
+h3 {
+  font-size: 13px;
+  margin-bottom: 5px;
+  margin-top: 0;
+}
+
+.client-address {
+  white-space: pre;
+}
+
+.invoice-details {
+  font-size: 11px;
+}
+
+.invoice-details h2.invoice-heading {
+  font-size: 17px;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.invoice-details h3 {
+  font-size: 14px;
+  letter-spacing: 0.7px;
+  margin-top: 0;
+  margin-bottom: 3px;
+}
+
+/*.invoice-details .invoice-date-title, .invoice-details .invoice-no-title {*/
+  /*text-align: right;*/
+  /*float: right;*/
+/*}*/
+
+/*.invoice-details .invoice-no-title {*/
+  /*padding-right: 25px;*/
+/*}*/
+
+.invoice-details .invoice-date, .invoice-details .invoice-no {
+  font-size: 15px;
+}
+
+.invoice-item {
+  margin-bottom: 25px;
+  margin-top: 20px;
+}
+
+.invoice-item thead {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.invoice-item thead .item-desc {
+  text-align: left;
+}
+
+.invoice-item thead .item-qty, .invoice-item thead .item-rate, .invoice-item thead .item-total {
+  text-align: right;
+}
+
+.invoice-item thead .item-desc {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+}
+
+.invoice-item thead .item-total {
+  padding-right: 20px;
+}
+
+.invoice-item tbody {
+  border-bottom: 1px solid black;
+}
+
+.invoice-item tbody .item-sno {
+  padding-left: 20px;
+  font-weight: bold;
+}
+
+.invoice-item tbody .item-desc {
+  padding-top: 15px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+}
+
+.invoice-item tbody .item-sno, .invoice-item tbody .item-qty, .invoice-item tbody .item-rate, .invoice-item tbody .item-total {
+  text-align: right;
+  padding-top: 15px;
+  vertical-align: top;
+  line-height: 1.1;
+}
+
+.invoice-item tbody .item-total {
+  padding-right: 20px;
+}
+
+.invoice-item tbody p {
+  margin: 0;
+  white-space: pre;
+}
+
+.invoice-item tfoot .sub-total-title, .invoice-item tfoot .vat-title, .invoice-item tfoot .rounding-title, .invoice-item tfoot .grand-total-title {
+  padding-left: 20px;
+}
+
+.invoice-item tfoot .sub-total-title p, .invoice-item tfoot .vat-title p, .invoice-item tfoot .rounding-title p, .invoice-item tfoot .grand-total-title p {
+  margin-bottom: 0;
+}
+
+.invoice-item tfoot .sub-total, .invoice-item tfoot .vat, .invoice-item tfoot .rounding, .invoice-item tfoot .grand-total {
+  padding-right: 20px;
+}
+
+.invoice-item tfoot .sub-total-title, .invoice-item tfoot .sub-total {
+  padding-top: 20px;
+}
+
+.invoice-item tfoot .vat-title, .invoice-item tfoot .vat {
+  padding-top: 10px;
+}
+
+.invoice-item tfoot .rounding-title, .invoice-item tfoot .rounding {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.invoice-item tfoot .grand-total-title, .invoice-item tfoot .grand-total {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.invoice-item tfoot .grand-total-row .grand-total-title, .invoice-item tfoot .grand-total-row .grand-total {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.invoice-item tfoot .invoice-add-details {
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-right: 25px;
+  border-bottom: 1px solid black;
+}
+
+.invoice-item tfoot .invoice-add-details .vat-exclude-title, .invoice-item tfoot .invoice-add-details .amount-word-title {
+  margin-bottom: 0;
+}
+
+.invoice-item tfoot .invoice-add-details .vat-exclude-desc {
+  margin-bottom: 15px;
+}
+
+.invoice-item tfoot .invoice-add-details .amount-word {
+  font-weight: bold;
+}
+
+.invoice-item tfoot .invoice-add-details .eoe {
+  font-weight: bold;
+}
+
+.invoice-item .currency {
+  text-align: right;
+}
+
+.invoice-footer {
+  width: 100%;
+  font-size: 11px;
+}
+
+.invoice-footer .payment-details {
+  padding-left: 15px;
+  vertical-align: top;
+}
+
+.invoice-footer .signature {
+  padding-right: 15px;
+  padding-left: 30px;
+}
+
+.invoice-footer .signature hr {
+  width: 230px;
+  border-top: 1px solid black;
+  margin-bottom: 15px;
+  margin-top: 30px;
+}
+
+.invoice-footer .signature .name {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
