@@ -1,0 +1,268 @@
+<div class="col-lg-10">
+  <div class="mail-box-header">
+    <h2>
+      View Invoice
+    </h2>
+    <div class="mail-tools tooltip-demo m-t-md">
+      <div class="btn-group pull-right" role="group" aria-label="toolbox">
+        <button type="button" class="btn btn-white" (click)="navigateList()">
+          <span class="fa fa-bars"></span> List
+        </button>
+        <button type="button" class="btn btn-white" (click)="nextInvoice()">
+          <span class="fa fa-arrow-up"></span>
+        </button>
+        <button type="button" class="btn btn-white" (click)="previousInvoice()">
+          <span class="fa fa-arrow-down"></span>
+        </button>
+      </div>
+    </div>
+    <!--<div class="mail-tools tooltip-demo m-t-md">-->
+    <!--<div class="btn-group" role="group" aria-label="toolbox">-->
+    <!--<button type="button" class="btn btn-white"><span class="fa fa-copy"></span>-->
+    <!--</button>-->
+    <!--<button type="button" class="btn btn-white"><span class="fa fa-pencil"></span>-->
+    <!--</button>-->
+    <!--</div>-->
+    <!--<div class="btn-group pull-right" role="group" aria-label="navigation">-->
+    <!--<button class="btn btn-white" (click)="backToInvoiceList()">-->
+    <!--<span class="fa fa-bars"></span>-->
+    <!--</button>-->
+    <!--<button class="btn btn-white"-->
+    <!--(click)="prevInvoice()">-->
+    <!--<i class="fa fa-arrow-up"></i>-->
+    <!--</button>-->
+    <!--<button class="btn btn-white"-->
+    <!--(click)="nextInvoice()">-->
+    <!--<i class="fa fa-arrow-down"></i>-->
+    <!--</button>-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="clearfix"></div>
+  </div>
+  <div class="mail-box">
+    <div class="mail-body">
+      <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="col-md-2 col-sm-6 col-sm-push-8">
+          <div class="form-group">
+            <label class="control-label" for="_id">Invoice No:</label>
+            <input type="text" id="_id"
+                   formControlName="_id"
+                   class="form-control"
+                   readonly>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="date">Date:</label>
+            <input type="text" id="date"
+                   formControlName="date"
+                   class="form-control">
+          </div>
+        </div>
+        <div class="col-md-pull-2 col-sm-8 col-sm-pull-6">
+          <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label" for="recipientName">Recipient Name</label>
+              <input type="text" id="recipientName"
+                     formControlName="recipientName"
+                     class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="recipientAddress">Recipient Address</label>
+              <textarea id="recipientAddress"
+                        formControlName="recipientAddress"
+                        class="form-control"
+                        rows="3"
+                        style="resize: none;"></textarea>
+            </div>
+            <div class="row">
+              <div class="form-group col-xs-8">
+                <label class="control-label" for="recipientState">Recipient State</label>
+                <input type="text" id="recipientState"
+                       formControlName="recipientState"
+                       class="form-control">
+              </div>
+              <div class="form-group col-xs-4 xs-clear-padding-left">
+                <label class="control-label" for="recipientStateCode">Code</label>
+                <input type="text" id="recipientStateCode"
+                       formControlName="recipientStateCode"
+                       class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="recipientGSTIN">Recipient GSTIN</label>
+              <input type="text" id="recipientGSTIN"
+                     formControlName="recipientGSTIN"
+                     class="form-control">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label" for="consigneeName">Consignee Name</label>
+              <input type="text" id="consigneeName"
+                     formControlName="consigneeName"
+                     class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="consigneeAddress">Consignee Address</label>
+              <textarea id="consigneeAddress"
+                        formControlName="consigneeAddress"
+                        class="form-control"
+                        rows="3"
+                        style="resize: none;"></textarea>
+            </div>
+            <div class="row">
+              <div class="form-group col-xs-8">
+                <label class="control-label" for="consigneeState">Consignee State</label>
+                <input type="text" id="consigneeState"
+                       formControlName="consigneeState"
+                       class="form-control">
+              </div>
+              <div class="form-group col-xs-4 xs-clear-padding-left">
+                <label class="control-label" for="consigneeStateCode">Code</label>
+                <input type="text" id="consigneeStateCode"
+                       formControlName="consigneeStateCode"
+                       class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="consigneeGSTIN">Consignee GSTIN</label>
+              <input type="text" id="consigneeGSTIN"
+                     formControlName="consigneeGSTIN"
+                     class="form-control">
+            </div>
+          </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <hr>
+        <ng-container formArrayName="items">
+          <ng-container *ngFor="let invoiceItem of items.controls; let i = index;" [formGroupName]="i">
+
+            <div class="col-md-12 col-sm-12">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="control-label" for="{{ 'item' + i  + 'Description'}}">{{ 'Item ' + (i+1)}}</label>
+                    <textarea id="{{ 'item' + i  + 'Description'}}"
+                              formControlName="description"
+                              class="form-control" rows="3" style="resize: none;"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-1 col-sm-2 col-xs-4">
+                  <div class="form-group text-right">
+                    <label class="control-label" for="{{ 'item' + i + 'hsn'}}">HSN</label>
+                    <input type="text" id="{{ 'item' + i + 'hsn'}}"
+                           formControlName="hsn"
+                           class="form-control text-right">
+                  </div>
+                </div>
+                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left">
+                  <div class="form-group text-right">
+                    <label class="control-label" for="{{ 'item' + i + 'Quantity'}}">Quantity</label>
+                    <input type="number" id="{{ 'item' + i + 'Quantity'}}"
+                           formControlName="quantity"
+                           class="form-control text-right">
+                  </div>
+                </div>
+                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left">
+                  <div class="form-group text-right">
+                    <label class="control-label" for="{{ 'item' + i + 'UnitPrice'}}">Unit Price</label>
+                    <input type="number" id="{{ 'item' + i + 'UnitPrice'}}"
+                           formControlName="unitPrice"
+                           class="form-control text-right">
+                  </div>
+                </div>
+                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left hidden-xs">
+                  <div class="form-group text-right">
+                    <label class="control-label" for="{{ 'item' + i + 'Amount'}}">Amount</label>
+                    <app-formatted-readonly-number id="{{ 'item' + i + 'Amount'}}"
+                                                   formControlName="amount" [format]="'1.0-0'"></app-formatted-readonly-number>
+                  </div>
+                </div>
+                <div class="col-md-1 col-sm-2 col-xs-4">
+                  <div class="form-group text-right">
+                    <label class="control-label" for="{{ 'item' + i + 'cgst'}}">CGST</label>
+                    <input type="number" id="{{ 'item' + i + 'cgst'}}"
+                           formControlName="cgst"
+                           class="form-control text-right">
+                  </div>
+                </div>
+                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left">
+                  <div class="form-group text-right">
+                    <label class="control-label" for="{{ 'item' + i + 'sgst'}}">SGST</label>
+                    <input type="number" id="{{ 'item' + i + 'sgst'}}"
+                           formControlName="sgst"
+                           class="form-control text-right">
+                  </div>
+                </div>
+                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left">
+                  <div class="form-group text-right">
+                    <label class="control-label" for="{{ 'item' + i + 'igst'}}">IGST</label>
+                    <input type="number" id="{{ 'item' + i + 'igst'}}"
+                           formControlName="igst"
+                           class="form-control text-right">
+                  </div>
+                </div>
+                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left hidden-xs">
+                  <div class="form-group text-right">
+                    <label class="control-label" for="{{ 'item' + i + 'tax'}}">Total Tax</label>
+                    <app-formatted-readonly-number id="{{ 'item' + i + 'tax'}}"
+                                                   formControlName="itemTax" [format]="'1.2-2'"></app-formatted-readonly-number>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-default" (click)="onAddInvoiceItem(i)"><span
+                        class="fa fa-plus"></span> Add
+                      </button>
+                      <button type="button" class="btn btn-default" (click)="onDuplicateInvoiceItem(i)"><span
+                        class="fa fa-copy"></span> Duplicate
+                      </button>
+                      <button type="button" class="btn btn-default" (click)="onDeleteInvoiceItem(i)"><span
+                        class="fa fa-times"></span> Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr>
+          </ng-container>
+        </ng-container>
+        <div class="col-md-4 col-sm-6">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-primary" (click)="onPrint()">Print
+          </button>
+        </div>
+        <div class="form-horizontal col-md-4 col-md-push-4 col-sm-6">
+          <div class="form-group text-right">
+            <label class="col-sm-6 control-label" for="amount">Total Amount</label>
+            <div class="col-sm-6">
+              <app-formatted-readonly-number id="amount"
+                                             formControlName="amount"></app-formatted-readonly-number>
+            </div>
+          </div>
+          <div class="form-group text-right">
+            <label class="col-sm-6 control-label" for="totalGSTValue">GST</label>
+            <div class="col-sm-6">
+              <app-formatted-readonly-number id="totalGSTValue"
+                                             formControlName="totalGSTValue"></app-formatted-readonly-number>
+            </div>
+          </div>
+          <div class="form-group text-right">
+            <label class="col-sm-6 control-label" for="grandTotal">Grand Total</label>
+            <div class="col-sm-6">
+              <app-formatted-readonly-number id="grandTotal"
+                                             formControlName="grandTotal"></app-formatted-readonly-number>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+      </form>
+      <!--<p>{{invoiceForm.value | json}}</p>-->
+      <app-invoice-gst-print #previewtax [invoice]="invoiceForm.value" [copies]="['Original for Recipient', 'Duplicate for Transporter', 'Triplicate for Supplier']"></app-invoice-gst-print>
+    </div>
+  </div>
+</div>

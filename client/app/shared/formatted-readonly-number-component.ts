@@ -1,9 +1,9 @@
-import {Component, forwardRef} from '@angular/core';
+import {Component, forwardRef, Input} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
   selector: 'app-formatted-readonly-number',
-  template: `<input type="text" class="form-control text-right" [value]="number | number:'1.2-2'" readonly>`,
+  template: `<input type="text" class="form-control text-right" [value]="number | number: format" readonly>`,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => FormattedReadonlyNumberComponent),
@@ -11,11 +11,18 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   }]
 })
 export class FormattedReadonlyNumberComponent implements ControlValueAccessor {
+  @Input('format') format: string;
 
-  public number: number;
+  public number = 0;
 
   writeValue(obj: any): void {
-    this.number = obj;
+    if (obj !== '') {
+      this.number = obj;
+    }
+
+    if (this.format === undefined || this.format === '' ) {
+      this.format = '1.2-2';
+    }
   }
 
   registerOnChange(fn: any): void {

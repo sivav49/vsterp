@@ -142,4 +142,10 @@ const paramValidation = {
   }
 };
 
-module.exports = {Invoice, getModelFromRequest, paramValidation};
+let InvoiceVatModel = {
+  Invoice,
+  getModelFromRequest,
+  paramValidation
+};
+
+module.exports = InvoiceVatModel;

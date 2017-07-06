@@ -193,8 +193,7 @@
         <div class="clearfix"></div>
       </form>
       <p>{{invoiceForm.value | json}}</p>
-      <app-invoice-preview #previewvat [invoice]="invoiceForm.value"></app-invoice-preview>
-      <app-invoice-preview-tax #previewtax [invoice]="invoiceForm.value"></app-invoice-preview-tax>
+      <app-invoice-vat-print #previewtax [invoice]="invoiceForm.value"></app-invoice-vat-print>
     </div>
   </div>
 </div>

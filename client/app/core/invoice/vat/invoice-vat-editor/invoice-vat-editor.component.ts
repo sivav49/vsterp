@@ -1,8 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, FormArray, Validators, AbstractControl} from '@angular/forms';
-import {Location, DecimalPipe} from '@angular/common';
-import {LOCALE_ID} from '@angular/core';
 import * as moment from 'moment';
 import {Observable} from 'rxjs/Observable';
 
@@ -24,12 +22,9 @@ const defaultVAT = 5;
 @Component({
   selector: 'app-invoice-vat-editor',
   templateUrl: './invoice-vat-editor.component.html',
-  styleUrls: ['./invoice-vat-editor.component.scss'],
-  providers: [DecimalPipe,
-    {provide: LOCALE_ID, useValue: 'en-IN'}]
+  styleUrls: ['./invoice-vat-editor.component.scss']
 })
 export class InvoiceVatEditorComponent implements OnInit {
-  // @ViewChild('previewvat') preview: InvoicePreviewComponent;
   @ViewChild('previewtax') preview: InvoiceVatPrintComponent;
 
   private mode = EditorMode.None;
@@ -40,9 +35,7 @@ export class InvoiceVatEditorComponent implements OnInit {
   constructor(public invoiceService: InvoiceVatService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
-              private fb: FormBuilder,
-              private location: Location,
-              private decimalPipe: DecimalPipe) {
+              private fb: FormBuilder) {
     this.createForm();
   }
 
@@ -98,10 +91,6 @@ export class InvoiceVatEditorComponent implements OnInit {
       vatAmount: '',
       grandTotal: ''
     });
-    // this.invoiceForm.get('_id').disable();
-    // this.invoiceForm.get('amount').disable();
-    // this.invoiceForm.get('vatAmount').disable();
-    // this.invoiceForm.get('grandTotal').disable();
     this.onAddInvoiceItem(0);
     this.invoiceForm.get('isVAT').valueChanges.subscribe(
       () => {
@@ -113,10 +102,6 @@ export class InvoiceVatEditorComponent implements OnInit {
   get items(): FormArray {
     return this.invoiceForm.get('items') as FormArray;
   };
-
-  formatNumber(number: Number) {
-    return this.decimalPipe.transform(number, '1.2-2');
-  }
 
   onAddInvoiceItem(i: number): void {
     this.items.insert(i + 1, this.createItemFormGroup());
@@ -137,7 +122,7 @@ export class InvoiceVatEditorComponent implements OnInit {
   }
 
   navigateList() {
-    this.router.navigate(['invoices']);
+    this.router.navigate(['invoice-vat']);
   }
 
   nextInvoice() {
@@ -152,7 +137,7 @@ export class InvoiceVatEditorComponent implements OnInit {
     if (this.invoiceForm.dirty) {
       alert('unsaved changes');
     } else {
-      this.router.navigate(['../..', id], {relativeTo: this.activatedRoute});
+      this.router.navigate(['../', id], {relativeTo: this.activatedRoute});
     }
   }
 
@@ -168,7 +153,6 @@ export class InvoiceVatEditorComponent implements OnInit {
     const quantity = itemFormGroup.get('quantity').value;
     const unitPrice = itemFormGroup.get('unitPrice').value;
     const itemAmount = quantity * unitPrice;
-    // itemFormGroup.get('amount').setValue(this.formatNumber(itemAmount));
     itemFormGroup.get('amount').setValue(itemAmount);
   }
 
@@ -198,18 +182,23 @@ export class InvoiceVatEditorComponent implements OnInit {
     });
 
     this.updateItemAmount(itemFG);
-    itemFG.get('quantity').valueChanges.subscribe(
-      () => {
-        this.updateItemAmount(itemFG);
-        this.updateInvoiceAmount();
-      }
-    );
-    itemFG.get('unitPrice').valueChanges.subscribe(
-      () => {
-        this.updateItemAmount(itemFG);
-        this.updateInvoiceAmount();
-      }
-    );
+
+    if (this.mode === EditorMode.View) {
+      itemFG.disable();
+    } else {
+      itemFG.get('quantity').valueChanges.subscribe(
+        () => {
+          this.updateItemAmount(itemFG);
+          this.updateInvoiceAmount();
+        }
+      );
+      itemFG.get('unitPrice').valueChanges.subscribe(
+        () => {
+          this.updateItemAmount(itemFG);
+          this.updateInvoiceAmount();
+        }
+      );
+    }
     return itemFG;
   }
 
@@ -241,5 +230,8 @@ export class InvoiceVatEditorComponent implements OnInit {
     });
 
     this.updateAllAmount();
+    if (this.mode === EditorMode.View) {
+      this.invoiceForm.disable();
+    }
   }
 }

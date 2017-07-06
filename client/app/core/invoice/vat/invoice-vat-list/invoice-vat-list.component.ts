@@ -4,7 +4,7 @@ import {InvoiceVat} from '../invoice-vat.model';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
-  selector: 'app-invoice-list',
+  selector: 'app-invoice-vat-list',
   templateUrl: './invoice-vat-list.component.html',
   styleUrls: ['./invoice-vat-list.component.scss']
 })
@@ -23,7 +23,7 @@ export class InvoiceVatListComponent implements OnInit {
   }
 
   viewDetails(invoice) {
-    this.router.navigate([invoice._id, 'edit'], {relativeTo: this.activatedRoute});
+    this.router.navigate([invoice._id], {relativeTo: this.activatedRoute});
   }
 
   setActive(invoice) {

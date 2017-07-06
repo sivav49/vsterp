@@ -8,14 +8,12 @@ import 'rxjs/add/operator/map';
 import {ToastsManager} from 'ng2-toastr';
 
 import {Invoice} from './invoice.model';
-import {ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot} from '@angular/router';
 import {ConfirmationResult, PopupService} from '../../shared/popup.service';
 
 @Injectable()
-export class InvoiceService {
-  private apiUrl = 'http://192.168.1.104:4300/api/invoices';
-
-  public active: Invoice;
+export class InvoiceService<InvoiceTax extends Invoice> {
+  protected apiUrl = '';
+  public active: InvoiceTax;
 
   private static extractData(res: Response) {
     const body = res.json();
@@ -40,37 +38,37 @@ export class InvoiceService {
 
   constructor(private http: Http,
               private toastr: ToastsManager,
-              private popup: PopupService<Invoice>) {
+              private popup: PopupService<InvoiceTax>) {
   }
 
-  getAll(): Observable<Invoice[]> {
+  getAll(): Observable<InvoiceTax[]> {
     return this.http.get(this.apiUrl)
-      .map(res => InvoiceService.extractData(res) as Array<Invoice>)
+      .map(res => InvoiceService.extractData(res) as Array<InvoiceTax>)
       .catch(InvoiceService.handleError);
   }
 
-  get(index: number): Observable<Invoice> {
+  get(index: number): Observable<InvoiceTax> {
     return this.http.get(this.apiUrl + '/' + index)
-      .map(res => InvoiceService.extractData(res) as Invoice)
+      .map(res => InvoiceService.extractData(res) as InvoiceTax)
       .catch(InvoiceService.handleError);
   }
 
-  create(invoice: Invoice): Observable<Invoice> {
+  create(invoice: InvoiceTax): Observable<InvoiceTax> {
     const request = this.http.post(this.apiUrl, JSON.stringify(invoice), InvoiceService.getJSONHeader());
     return this.handleResponse(request, 'created successfully', 'An error occurred');
   }
 
-  update(_id: number, invoice: Invoice): Observable<Invoice> {
+  update(_id: number, invoice: InvoiceTax): Observable<InvoiceTax> {
     const request = this.http.put(this.apiUrl + '/' + _id, JSON.stringify(invoice), InvoiceService.getJSONHeader());
     return this.handleResponse(request, 'updated successfully', 'An error occurred');
   }
 
-  remove(_id: string): Observable<Invoice> {
+  remove(_id: string): Observable<InvoiceTax> {
     const request = this.http.delete(this.apiUrl + '/' + _id);
     return this.handleResponse(request, 'deleted successfully', 'An Error occurred');
   }
 
-  removeConfirmation(invoiceId: string): Observable<ConfirmationResult<Invoice>> {
+  removeConfirmation(invoiceId: string): Observable<ConfirmationResult<InvoiceTax>> {
     return this.popup.deleteConfirmation(invoiceId)
       .map((popup) => {
         if (popup.isOkay()) {
@@ -89,7 +87,7 @@ export class InvoiceService {
     return apiCall
       .map(
         (res: Response) => {
-          const invoice = InvoiceService.extractData(res) as Invoice;
+          const invoice = InvoiceService.extractData(res) as InvoiceTax;
           if (invoice) {
             this.active = invoice;
             this.toastr.success(invoice._id + ' ' + successMessage);
@@ -106,24 +104,4 @@ export class InvoiceService {
   }
 }
 
-@Injectable()
-export class InvoiceGetResolve implements Resolve<Invoice> {
 
-  constructor(private router: Router,
-              private invoiceService: InvoiceService) {
-  }
-
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Invoice | Observable<Invoice> | Promise<Invoice> {
-    const invoiceId = route.params['id'];
-    return this.invoiceService.get(invoiceId).map(
-      invoice => {
-        if (invoice) {
-          return invoice;
-        } else {
-          this.router.navigate(['404']);
-          return invoice;
-        }
-      }
-    );
-  }
-}

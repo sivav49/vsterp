@@ -1,19 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {InvoiceService} from '../invoice.service';
-import {Invoice} from '../invoice.model';
+import {InvoiceGstService} from '../invoice-gst.service';
+import {InvoiceGst} from '../invoice-gst.model';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
-  selector: 'app-invoice-listing',
-  templateUrl: './invoice-listing.component.html',
-  styleUrls: ['./invoice-listing.component.scss']
+  selector: 'app-invoice-gst-list',
+  templateUrl: './invoice-gst-list.component.html',
+  styleUrls: ['./invoice-gst-list.component.scss']
 })
-export class InvoiceListingComponent implements OnInit {
+export class InvoiceGstListComponent implements OnInit {
   public loaded = false;
-  public invoiceList: Invoice[];
+  public invoiceList: InvoiceGst[];
   private errorMessage: any;
 
-  constructor(private invoiceService: InvoiceService,
+  constructor(private invoiceService: InvoiceGstService,
               private router: Router,
               private activatedRoute: ActivatedRoute) {
   }
@@ -23,7 +23,7 @@ export class InvoiceListingComponent implements OnInit {
   }
 
   viewDetails(invoice) {
-    this.router.navigate([invoice._id, 'edit'], {relativeTo: this.activatedRoute});
+    this.router.navigate([invoice._id], {relativeTo: this.activatedRoute});
   }
 
   setActive(invoice) {

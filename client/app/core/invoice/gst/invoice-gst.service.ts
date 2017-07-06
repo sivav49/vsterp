@@ -7,30 +7,30 @@ import 'rxjs/add/operator/map';
 
 import {ToastsManager} from 'ng2-toastr';
 
-import {InvoiceVat} from './invoice-vat.model';
+import {InvoiceGst} from './invoice-gst.model';
 import {PopupService} from '../../../shared/popup.service';
 
 import {InvoiceService} from '../invoice-service';
 
 @Injectable()
-export class InvoiceVatService extends InvoiceService<InvoiceVat> {
-  protected apiUrl = 'http://192.168.1.104:4300/api/invoices';
+export class InvoiceGstService extends InvoiceService<InvoiceGst> {
+  protected apiUrl = 'http://192.168.1.104:4300/api/invoice-gst';
 
   constructor(http: Http,
               toastr: ToastsManager,
-              popup: PopupService<InvoiceVat>) {
+              popup: PopupService<InvoiceGst>) {
     super(http, toastr, popup);
   }
 }
 
 @Injectable()
-export class InvoiceVatGetResolve implements Resolve<InvoiceVat> {
+export class InvoiceGstGetResolve implements Resolve<InvoiceGst> {
 
   constructor(private router: Router,
-              private invoiceService: InvoiceVatService) {
+              private invoiceService: InvoiceGstService) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): InvoiceVat | Observable<InvoiceVat> | Promise<InvoiceVat> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): InvoiceGst | Observable<InvoiceGst> | Promise<InvoiceGst> {
     const invoiceId = route.params['id'];
     return this.invoiceService.get(invoiceId).map(
       invoice => {

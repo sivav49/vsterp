@@ -1,0 +1,220 @@
+<div id="invoice-gst-print" style="display: none;">
+  <div *ngFor="let copyTitle of copies">
+  <div style="page-break-after: always">
+    <div class="col-lg-12 invoice-preview invoice-gst-page" style="padding: 0;">
+      <div class="invoice-details">
+        <div class="col-xs-5" style="padding-left: 0;">
+          <h2 class="invoice-heading"><b>Tax Invoice</b></h2>
+          <h3>{{copyTitle}}</h3>
+        </div>
+        <div class="col-xs-3"></div>
+        <div class="col-xs-4" style="padding-right: 0;">
+          <table>
+            <colgroup style="width: 100px"></colgroup>
+            <colgroup style="width: 90px;"></colgroup>
+            <tr>
+              <td class="text-right" style="padding-right: 15px;">Invoice No:</td>
+              <td class="text-center">{{formatBillNumber(invoice._id)}}</td>
+            </tr>
+            <tr>
+              <td class="text-right" style="padding-right: 15px;">Invoice Date:</td>
+              <td class="text-center">{{invoice.date}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="col-xs-12 client-details">
+        <div class="col-xs-4" style="padding-left: 0;">
+          <h3><b>Details of Supplier:</b></h3>
+          <p class="client-address">{{"VST Associated Graphics Pvt. Ltd\nNo. 7, Kamarajar Salai, \nThanthai Periyar Nagar, \nChennai - 600 087"}}</p>
+          <div class="col-xs-2 pad-0">State:</div>
+          <div class="col-xs-10">Tamil Nadu (33)</div>
+          <div class="col-xs-2 pad-0">GSTIN:</div>
+          <div class="col-xs-10">33AABCV2833J1ZF</div>
+        </div>
+        <div class="col-xs-4">
+          <h3><b>Details of Recipient:</b></h3>
+          <p class="client-name">{{invoice.recipientName}}</p>
+          <p class="client-address">{{invoice.recipientAddress}}</p>
+          <div class="col-xs-2 pad-0">State:</div>
+          <div class="col-xs-10">{{invoice.recipientState}} ({{invoice.recipientStateCode}})</div>
+          <div class="col-xs-2 pad-0">GSTIN:</div>
+          <div class="col-xs-10">{{invoice.recipientGSTIN}}</div>
+        </div>
+        <div class="col-xs-4" style="padding-right: 0;">
+          <h3><b>Details of Consignee:</b></h3>
+          <p class="client-name">{{invoice.consigneeName}}</p>
+          <p class="client-address">{{invoice.consigneeAddress}}</p>
+          <div class="col-xs-2 pad-0">State:</div>
+          <div class="col-xs-10">{{invoice.consigneeState}} ({{invoice.consigneeStateCode}})</div>
+          <div class="col-xs-2 pad-0">GSTIN:</div>
+          <div class="col-xs-10">{{invoice.consigneeGSTIN}}</div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <table class="invoice-item">
+        <colgroup></colgroup>
+        <colgroup style="width: 52%;"></colgroup>
+        <colgroup style="width: 0;"></colgroup>
+        <colgroup style="width: 16%;"></colgroup>
+        <colgroup style="width: 16%;"></colgroup>
+        <colgroup style="width: 16%;"></colgroup>
+        <colgroup style="width: 0;"></colgroup>
+        <colgroup style="width: 0;"></colgroup>
+        <colgroup style="width: 0;"></colgroup>
+        <thead>
+        <tr>
+          <th colspan="2" class="item-desc">DESCRIPTION</th>
+          <th class="item-hsn">HSN</th>
+          <th class="item-qty">QTY</th>
+          <th class="item-rate">RATE</th>
+          <th class="item-total">AMT</th>
+          <th class="item-gst">CGST</th>
+          <th class="item-gst">SGST</th>
+          <th class="item-gst">IGST</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let invoiceItem of invoice.items; let i = index;">
+          <td class="item-sno">{{(i + 1) + ". "}}</td>
+          <td class="item-desc">
+            <h3 class="item-name">{{getTitlePart(invoiceItem)}}</h3>
+            <p>{{getDescriptionPart(invoiceItem)}}</p>
+          </td>
+          <td class="item-hsn item-value">{{invoiceItem.hsn}}</td>
+          <td class="item-qty item-value">{{invoiceItem.quantity| number: '1.0-0'}}</td>
+          <td class="item-rate item-value currency">{{invoiceItem.unitPrice | number: '1.2-2'}}</td>
+          <td class="item-total item-value currency">{{invoiceItem.amount | number: '1.2-2'}}</td>
+          <td class="item-gst item-value currency">{{invoiceItem.cgstValue | number: '1.2-2'}}<p
+            class="item-gst-percent">({{invoiceItem.cgst}}%)</p></td>
+          <td class="item-gst item-value currency">{{invoiceItem.sgstValue | number: '1.2-2'}}<p
+            class="item-gst-percent">({{invoiceItem.sgst}}%)</p></td>
+          <td class="item-gst item-value currency">{{invoiceItem.igstValue | number: '1.2-2'}}<p
+            class="item-gst-percent">({{invoiceItem.igst}}%)</p></td>
+        </tr>
+        <tr>
+          <td class="spacing-cell"></td>
+          <td style="border-left: 0;"></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr class="sub-total-row">
+          <td class="item-sno"></td>
+          <td class="item-desc sub-total">Total</td>
+          <td class="item-hsn item-value"></td>
+          <td class="item-qty item-value"></td>
+          <td class="item-rate item-value currency"></td>
+          <td class="item-total item-value currency">{{invoice.amount | number: '1.2-2'}}</td>
+          <td class="item-gst item-value currency">{{invoice.totalCGSTValue | number: '1.2-2'}}</td>
+          <td class="item-gst item-value currency">{{invoice.totalSGSTValue | number: '1.2-2'}}</td>
+          <td class="item-gst item-value currency">{{invoice.totalIGSTValue | number: '1.2-2'}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td rowspan="3" colspan="4" class="invoice-add-details">
+            <p class="amount-word-title">Amount chargeable (in words)</p>
+            <p class="amount-word">{{getNumberText(invoice.grandTotal)}}</p>
+          </td>
+          <td colspan="3" class="title sub-total-title">Total Amount Before Tax</td>
+          <td colspan="2" class="amount sub-total currency" style="border-right: 1px solid black;">{{invoice.amount |
+            number: '1.0-0'}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" class="title gst-component-title">Add - CGST</td>
+          <td colspan="2" class="amount gst-component currency" style="border-right: 1px solid black;">
+            {{invoice.totalCGSTValue | number: '1.0-0'}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" class="title gst-component-title">Add - SGST</td>
+          <td colspan="2" class="amount gst-component currency" style="border-right: 1px solid black;">
+            {{invoice.totalSGSTValue | number: '1.0-0'}}
+          </td>
+        </tr>
+        <tr>
+          <td rowspan="4" colspan="4" class="bank-details-td">
+            <b>BANK DETAILS</b>
+            <table style="width: 100%;" class="bank-details">
+              <colgroup style="width: 30%;"></colgroup>
+              <colgroup style="width: 70%;"></colgroup>
+              <tbody>
+              <tr>
+                <td>Account Name:</td>
+                <td>VST Associated Graphics Pvt. Ltd.</td>
+              </tr>
+              <tr>
+                <td>Account Number:</td>
+                <td>410700050900021</td>
+              </tr>
+              <tr>
+                <td>Bank:</td>
+                <td>Tamilnad Mercantile Bank</td>
+              </tr>
+              <tr>
+                <td>Branch:</td>
+                <td>Nerkundram</td>
+              </tr>
+              <tr>
+                <td>IFS Code:</td>
+                <td>TMBL0000410</td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+          <td colspan="3" class="title gst-component-title">Add - IGST</td>
+          <td colspan="2" class="amount gst-component currency" style="border-right: 1px solid black;">
+            {{invoice.totalIGSTValue | number: '1.0-0'}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" class="title gst-title">Total GST</td>
+          <td colspan="2" class="amount gst currency" style="border-right: 1px solid black;">{{invoice.totalGSTValue |
+            number: '1.0-0'}}
+          </td>
+        </tr>
+        <tr class="grand-total-row">
+          <td colspan="3" class="title grand-total-title">Total Amount After Tax</td>
+          <td colspan="2" class="amount grand-total currency" style="border-right: 1px solid black;">
+            {{invoice.grandTotal | number: '1.0-0'}}
+          </td>
+        </tr>
+        <tr class="grand-total-row">
+          <td colspan="4" class="title gst-component-title"
+              style="border-bottom: 1px solid black; padding-bottom: 10px;">
+            GST Payable on Reverse Charge
+          </td>
+          <td colspan="1" class="amount gst-component currency"
+              style="border-right: 1px solid black; border-bottom: 1px solid black; padding-bottom: 10px;">NA
+          </td>
+        </tr>
+        </tfoot>
+      </table>
+      <table class="invoice-footer">
+        <colgroup style="width: 55%"></colgroup>
+        <colgroup style="width: 45%"></colgroup>
+        <tr>
+          <td class="supplier-details" style="vertical-align: bottom">
+            <h3><b>Thank You For Your Business!</b></h3>
+          </td>
+          <td class="signature">
+            <p class="text-center">For <b>VST ASSOCIATED GRAPHICS PRIVATE LIMITED</b></p>
+            <br>
+            <hr>
+            <p class="name text-center">V. SIVARAJAN</p>
+            <p class="designation text-center" style="margin-bottom: 0;">
+              <span class="eoe-spacing"></span>Authorized Signatory<span class="eoe">E & OE</span></p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
