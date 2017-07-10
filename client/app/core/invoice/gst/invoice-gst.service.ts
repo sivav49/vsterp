@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import {Http, Response} from '@angular/http';
 import {ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 
@@ -15,6 +15,19 @@ import {InvoiceService} from '../invoice-service';
 @Injectable()
 export class InvoiceGstService extends InvoiceService<InvoiceGst> {
   protected apiUrl = 'http://192.168.1.104:4300/api/invoice-gst';
+
+  protected extractData(res: Response): InvoiceGst[] | InvoiceGst {
+    const data = super.extractData(res);
+    if (Array.isArray(data)) {
+     const invoices: InvoiceGst[] = [];
+     for (const invoice of data) {
+       invoices.push(InvoiceGst.convertFromAny(invoice));
+     }
+     return invoices;
+    } else {
+      return InvoiceGst.convertFromAny(data);
+    }
+  }
 
   constructor(http: Http,
               toastr: ToastsManager,

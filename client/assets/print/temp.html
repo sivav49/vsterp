@@ -1,0 +1,70 @@
+<table>
+  <tr>
+    <td>
+      <div class="invoice-add-details">
+        <p class="amount-word-title">Amount chargeable (in words)</p>
+        <p class="amount-word">{{getNumberText(invoice.grandTotal)}}</p>
+      </div>
+      <div class="bank-details-td">
+        <table style="width: 100%;" class="bank-details">
+          <colgroup style="width: 30%;"></colgroup>
+          <colgroup style="width: 70%;"></colgroup>
+          <tbody>
+          <tr>
+            <td>Account Name:</td>
+            <td>VST Associated Graphics Pvt. Ltd.</td>
+          </tr>
+          <tr>
+            <td>Account Number:</td>
+            <td>410700050900021</td>
+          </tr>
+          <tr>
+            <td>Bank:</td>
+            <td>Tamilnad Mercantile Bank</td>
+          </tr>
+          <tr>
+            <td>Branch:</td>
+            <td>Nerkundram</td>
+          </tr>
+          <tr>
+            <td>IFS Code:</td>
+            <td>TMBL0000410</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </td>
+    <td>
+      <table>
+        <tr>
+          <td class="title sub-total-title">Total Amount Before Tax</td>
+          <td class="amount sub-total currency" style="border-right: 1px solid black;">{{invoice.amount | number: '1.0-0'}}
+        </tr>
+        <tr>
+          <td class="title gst-component-title">Add - CGST</td>
+          <td class="amount gst-component currency" style="border-right: 1px solid black;">
+            {{invoice.totalCGSTValue | number: '1.0-0'}}
+          </td>
+        </tr>
+        <tr>
+          <td class="title gst-component-title">Add - SGST</td>
+          <td class="amount gst-component currency" style="border-right: 1px solid black;">
+            {{invoice.totalSGSTValue | number: '1.0-0'}}
+          </td>
+        </tr>
+        <tr>
+          <td class="title gst-title">Total GST</td>
+          <td class="amount gst currency" style="border-right: 1px solid black;">
+            {{invoice.totalGSTValue | number: '1.0-0'}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" class="title grand-total-title">Total Amount After Tax</td>
+          <td colspan="2" class="amount grand-total currency" style="border-right: 1px solid black;">
+            {{invoice.grandTotal | number: '1.0-0'}}
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

@@ -15,11 +15,6 @@ export class InvoiceService<InvoiceTax extends Invoice> {
   protected apiUrl = '';
   public active: InvoiceTax;
 
-  private static extractData(res: Response) {
-    const body = res.json();
-    return body.data || {};
-  }
-
   private static handleError(error: Response | any) {
     // In a real world app, you might use a remote logging infrastructure
     let errMsg: string;
@@ -41,15 +36,20 @@ export class InvoiceService<InvoiceTax extends Invoice> {
               private popup: PopupService<InvoiceTax>) {
   }
 
+  protected extractData(res: Response) {
+    const body = res.json();
+    return body.data || {};
+  }
+
   getAll(): Observable<InvoiceTax[]> {
     return this.http.get(this.apiUrl)
-      .map(res => InvoiceService.extractData(res) as Array<InvoiceTax>)
+      .map(res => this.extractData(res) as Array<InvoiceTax>)
       .catch(InvoiceService.handleError);
   }
 
   get(index: number): Observable<InvoiceTax> {
     return this.http.get(this.apiUrl + '/' + index)
-      .map(res => InvoiceService.extractData(res) as InvoiceTax)
+      .map(res => this.extractData(res) as InvoiceTax)
       .catch(InvoiceService.handleError);
   }
 
@@ -63,12 +63,12 @@ export class InvoiceService<InvoiceTax extends Invoice> {
     return this.handleResponse(request, 'updated successfully', 'An error occurred');
   }
 
-  remove(_id: string): Observable<InvoiceTax> {
+  remove(_id: number): Observable<InvoiceTax> {
     const request = this.http.delete(this.apiUrl + '/' + _id);
     return this.handleResponse(request, 'deleted successfully', 'An Error occurred');
   }
 
-  removeConfirmation(invoiceId: string): Observable<ConfirmationResult<InvoiceTax>> {
+  removeConfirmation(invoiceId: number): Observable<ConfirmationResult<InvoiceTax>> {
     return this.popup.deleteConfirmation(invoiceId)
       .map((popup) => {
         if (popup.isOkay()) {
@@ -87,7 +87,7 @@ export class InvoiceService<InvoiceTax extends Invoice> {
     return apiCall
       .map(
         (res: Response) => {
-          const invoice = InvoiceService.extractData(res) as InvoiceTax;
+          const invoice = this.extractData(res) as InvoiceTax;
           if (invoice) {
             this.active = invoice;
             this.toastr.success(invoice._id + ' ' + successMessage);

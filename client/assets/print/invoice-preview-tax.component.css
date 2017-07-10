@@ -107,6 +107,7 @@ h3 {
   padding-left: 10px;
   font-weight: bold;
   border-right: 0;
+  font-size: 13px;
 }
 
 .invoice-item tbody .item-desc {
@@ -155,7 +156,7 @@ h3 {
 
 .invoice-item tbody p {
   margin: 0;
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 .invoice-item tfoot .title,
@@ -184,19 +185,13 @@ h3 {
   font-size: 13px;
 }
 
-.invoice-item tfoot .invoice-add-details {
-  padding-left: 20px;
-  padding-top: 10px;
-  padding-right: 25px;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-}
 
 .invoice-item tfoot .invoice-add-details .vat-exclude-title, .invoice-item tfoot .invoice-add-details .amount-word-title {
   margin-bottom: 0;
 }
 .invoice-item tfoot .invoice-add-details {
   vertical-align: top;
+  padding-bottom: 20px;
 }
 
 .invoice-item tfoot .invoice-add-details .vat-exclude-desc {
@@ -212,12 +207,7 @@ h3 {
 }
 
 .invoice-item tfoot .bank-details-td {
-  border-bottom: 1px solid black;
-  border-right: 1px solid black;
-  border-top: 0;
-  border-left: 1px solid black;
-  padding-left: 20px;
-  vertical-align: top;
+
 }
 
 .invoice-item tfoot .bank-details td {
@@ -226,6 +216,10 @@ h3 {
 
 .invoice-item .currency {
   text-align: right;
+}
+
+.total-table tbody td {
+  border: 0;
 }
 
 .invoice-footer {

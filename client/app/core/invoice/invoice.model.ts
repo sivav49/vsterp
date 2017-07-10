@@ -1,4 +1,8 @@
 export class Invoice {
+  public static convertFromAny(obj): Invoice {
+    return new Invoice(obj._id, obj.date);
+  }
+
   constructor(public _id: number,
               public date: Date) {
   }

@@ -141,7 +141,7 @@ const invoiceItemArraySchema = Joi
 const paramValidation = {
   create: {
     body: {
-      date: Joi.date().format('DD-MM-YYYY').required(),
+      date: Joi.date().iso().required(),
       recipientName: Joi.string().required(),
       recipientAddress: Joi.string().required(),
       recipientState: Joi.string().required(),
@@ -158,7 +158,7 @@ const paramValidation = {
 
   update: {
     body: {
-      date: Joi.date().format('DD-MM-YYYY').required(),
+      date: Joi.date().iso().required(),
       recipientName: Joi.string().required(),
       recipientAddress: Joi.string().required(),
       recipientState: Joi.string().required(),

@@ -5,7 +5,7 @@ import {DashboardComponent} from './view/dashboard/dashboard.component';
 import {PageNotFoundComponent} from './view/page-not-found/page-not-found.component';
 
 // import {InvoiceComponent} from './core/invoice/invoice.component';
-// import {InvoiceEditorComponent} from './core/invoice/invoice-editor/invoice-editor.component';
+// import {InvoiceEditorComponInvoiceGstServiceent} from './core/invoice/invoice-editor/invoice-editor.component';
 // import {InvoiceListingComponent} from './core/invoice/invoice-listing/invoice-listing.component';
 // import {InvoiceGetResolve} from './core/invoice/invoice.service';
 
@@ -33,7 +33,7 @@ enum EditorMode {
 }
 
 export const ROUTES: Routes = [{
-  path: '', redirectTo: 'invoice-vat', pathMatch: 'full'
+  path: '', redirectTo: 'invoice-gst', pathMatch: 'full'
 }, {
   path: '', component: BasicLayoutComponent,
   children: [

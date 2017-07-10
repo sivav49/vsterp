@@ -34,6 +34,13 @@ export class InvoiceGstListComponent implements OnInit {
     this.router.navigate(['create'], {relativeTo: this.activatedRoute});
   }
 
+  removeInvoice() {
+    this.invoiceService.removeConfirmation(this.invoiceService.active._id)
+      .subscribe(() => {
+        this.reload();
+      });
+  }
+
   private reload() {
     this.loaded = false;
     this.invoiceService.getAll()

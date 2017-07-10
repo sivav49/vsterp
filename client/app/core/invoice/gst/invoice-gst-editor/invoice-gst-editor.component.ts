@@ -27,6 +27,7 @@ export class InvoiceGstEditorComponent implements OnInit {
 
   private mode = EditorMode.None;
 
+  public copies = 2;
   public invoiceForm: FormGroup;
 
   constructor(public invoiceService: InvoiceGstService,
@@ -41,6 +42,7 @@ export class InvoiceGstEditorComponent implements OnInit {
       .subscribe(
         data => {
           this.mode = data.mode;
+          this.invoiceService.active = undefined;
           if (this.mode === EditorMode.Edit || this.mode === EditorMode.View) {
             this.setInvoiceForm(data.invoice);
             this.invoiceService.active = data.invoice;
@@ -51,10 +53,9 @@ export class InvoiceGstEditorComponent implements OnInit {
 
   onSubmit() {
     let serviceCall: Observable<InvoiceGst>;
-    const invoice = this.invoiceForm.value;
+    const invoice = InvoiceGst.convertFromFormGroup(this.invoiceForm);
     if (this.mode === EditorMode.Create) {
       serviceCall = this.invoiceService.create(invoice);
-
     } else if (this.mode === EditorMode.Edit) {
       serviceCall = this.invoiceService.update(this.invoiceService.active._id, invoice);
     }
@@ -82,11 +83,9 @@ export class InvoiceGstEditorComponent implements OnInit {
       consigneeGSTIN: '',
       items: this.fb.array([]),
       amount: '',
-      totalCGSTValue: '',
-      totalSGSTValue: '',
-      totalIGSTValue: '',
       totalGSTValue: '',
-      grandTotal: ''
+      grandTotal: '',
+      fullRounding: ''
     });
     this.onAddInvoiceItem(0);
   }
@@ -96,58 +95,52 @@ export class InvoiceGstEditorComponent implements OnInit {
     const itemFG = this.fb.group({
       description: item.description || '',
       hsn: item.hsn || '',
-      quantity: item.quantity || '',
-      unitPrice: item.unitPrice || '',
+      quantity: item.quantity || 0,
+      unitPrice: item.unitPrice || 0,
       amount: 0,
-      cgst: item.cgst || '',
-      cgstValue: 0,
-      sgst: item.sgst || '',
-      sgstValue: 0,
-      igst: item.igst || '',
-      igstValue: 0,
-      itemTax: 0,
+      cgst: item.cgst || 0,
+      sgst: item.sgst || 0,
+      igst: item.igst || 0,
+      itemTax: 0
     });
 
-    if (this.mode === EditorMode.View) {
-      itemFG.disable();
-    } else {
-      itemFG.get('quantity').valueChanges.subscribe(
-        () => {
-          this.updateComputedValues();
-        }
-      );
-      itemFG.get('unitPrice').valueChanges.subscribe(
-        () => {
-          this.updateComputedValues();
-        }
-      );
-      itemFG.get('cgst').valueChanges.subscribe(
-        () => {
-          this.updateComputedValues();
-        }
-      );
-      itemFG.get('sgst').valueChanges.subscribe(
-        () => {
-          this.updateComputedValues();
-        }
-      );
-      itemFG.get('igst').valueChanges.subscribe(
-        () => {
-          this.updateComputedValues();
-        }
-      );
-    }
+    itemFG.get('quantity').valueChanges.subscribe(
+      () => {
+        this.updateComputedValues();
+      }
+    );
+    itemFG.get('unitPrice').valueChanges.subscribe(
+      () => {
+        this.updateComputedValues();
+      }
+    );
+    itemFG.get('cgst').valueChanges.subscribe(
+      () => {
+        this.updateComputedValues();
+      }
+    );
+    itemFG.get('sgst').valueChanges.subscribe(
+      () => {
+        this.updateComputedValues();
+      }
+    );
+    itemFG.get('igst').valueChanges.subscribe(
+      () => {
+        this.updateComputedValues();
+      }
+    );
+
     return itemFG;
   }
 
   private setInvoiceForm(invoice: InvoiceGst) {
-    const invoiceItemFGs = invoice.items.map(() => this.createItemFormGroup());
+    const invoiceItemFGs = invoice.items.map((item) => this.createItemFormGroup(item));
     const invoiceItemFormArray = this.fb.array(invoiceItemFGs);
     this.invoiceForm.setControl('items', invoiceItemFormArray);
 
-    this.invoiceForm.setValue({
+    this.invoiceForm.patchValue({
       _id: invoice._id,
-      date: moment(invoice.date).format('DD-MM-YYYY'),
+      date: moment(invoice.date).format('YYYY-MM-DD'),
       recipientName: invoice.recipientName,
       recipientAddress: invoice.recipientAddress,
       recipientState: invoice.recipientState,
@@ -158,26 +151,7 @@ export class InvoiceGstEditorComponent implements OnInit {
       consigneeState: invoice.consigneeState,
       consigneeStateCode: invoice.consigneeStateCode,
       consigneeGSTIN: invoice.consigneeGSTIN,
-      items: invoice.items.map(item => {
-        return {
-          description: item.description || '',
-          hsn: item.hsn || '',
-          quantity: item.quantity,
-          unitPrice: item.unitPrice,
-          amount: 0,
-          cgst: item.cgst,
-          cgstValue: 0,
-          sgst: item.sgst,
-          sgstValue: 0,
-          igst: item.igst,
-          igstValue: 0,
-          itemTax: 0
-        };
-      }),
       amount: 0,
-      totalCGSTValue: 0,
-      totalSGSTValue: 0,
-      totalIGSTValue: 0,
       totalGSTValue: 0,
       grandTotal: 0
     });
@@ -189,74 +163,22 @@ export class InvoiceGstEditorComponent implements OnInit {
   }
 
   private updateComputedValues() {
+    const invoice = InvoiceGst.convertFromFormGroup(this.invoiceForm);
+
     const itemFGs = this.invoiceForm.get('items') as FormArray;
-    let totalAmount = 0;
-    let totalCGSTValue = 0;
-    let totalSGSTValue = 0;
-    let totalIGSTValue = 0;
-    let totalGSTValue = 0;
-    for (const item of itemFGs.controls) {
-      const quantity = item.get('quantity').value;
-      const unitPrice = item.get('unitPrice').value;
-      const itemAmount = quantity * unitPrice;
-      const cgst = item.get('cgst').value;
-      const cgstValue = (itemAmount * cgst / 100);
-      const sgst = item.get('sgst').value;
-      const sgstValue = (itemAmount * sgst / 100);
-      const igst = item.get('igst').value;
-      const igstValue = (itemAmount * igst / 100);
-      const itemTax = cgstValue + sgstValue + igstValue;
+    itemFGs.controls.forEach((item, index) => {
+      const invItem = invoice.items[index];
+      if (invItem) {
+        item.get('amount').setValue(invItem.amount);
+        item.get('itemTax').setValue(invItem.itemTax);
+      }
+    });
 
-      item.get('amount').setValue(itemAmount);
-      item.get('cgstValue').setValue(cgstValue);
-      item.get('sgstValue').setValue(sgstValue);
-      item.get('igstValue').setValue(igstValue);
-      item.get('itemTax').setValue(itemTax);
-
-      totalAmount += itemAmount;
-      totalCGSTValue += cgstValue;
-      totalSGSTValue += sgstValue;
-      totalIGSTValue += igstValue;
-      totalGSTValue += itemTax;
-
-    }
-    const grandTotal = totalAmount + totalGSTValue;
-
-    this.invoiceForm.get('amount').setValue(totalAmount);
-    this.invoiceForm.get('totalCGSTValue').setValue(totalCGSTValue);
-    this.invoiceForm.get('totalSGSTValue').setValue(totalSGSTValue);
-    this.invoiceForm.get('totalIGSTValue').setValue(totalIGSTValue);
-    this.invoiceForm.get('totalGSTValue').setValue(totalGSTValue);
-    this.invoiceForm.get('grandTotal').setValue(grandTotal);
+    this.invoiceForm.get('amount').setValue(invoice.amount);
+    this.invoiceForm.get('totalGSTValue').setValue(invoice.totalGSTValue);
+    this.invoiceForm.get('grandTotal').setValue(invoice.grandTotal);
   }
 
-  // private updateAllAmount() {
-  //   const itemFGs = this.invoiceForm.get('items') as FormArray;
-  //   for (const item of itemFGs.controls) {
-  //     this.updateItemAmount(item);
-  //   }
-  //   this.updateInvoiceAmount();
-  // }
-  //
-  // private updateItemAmount(itemFormGroup: AbstractControl) {
-  //   const quantity = itemFormGroup.get('quantity').value;
-  //   const unitPrice = itemFormGroup.get('unitPrice').value;
-  //   const itemAmount = quantity * unitPrice;
-  //   itemFormGroup.get('amount').setValue(itemAmount);
-  // }
-  //
-  // private updateInvoiceAmount() {
-  //   const itemFGs = this.invoiceForm.get('items') as FormArray;
-  //   let amount = 0;
-  //   for (const item of itemFGs.controls) {
-  //     const qty = item.get('quantity').value;
-  //     const rate = item.get('unitPrice').value;
-  //     amount += qty * rate;
-  //   }
-  //   const grandTotal = amount;
-  //   this.invoiceForm.get('amount').setValue(amount);
-  //   this.invoiceForm.get('grandTotal').setValue(grandTotal);
-  // }
 
   get items(): FormArray {
     return this.invoiceForm.get('items') as FormArray;
@@ -294,7 +216,7 @@ export class InvoiceGstEditorComponent implements OnInit {
 
   onPrint() {
     if (this.preview) {
-      this.preview.print(this.invoiceForm.value);
+      this.preview.print();
     }
   }
 

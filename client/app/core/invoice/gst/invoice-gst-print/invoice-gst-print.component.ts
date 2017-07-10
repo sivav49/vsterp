@@ -7,8 +7,20 @@ import * as numberToText from 'number2text';
   templateUrl: './invoice-gst-print.component.html'
 })
 export class InvoiceGstPrintComponent implements OnInit {
+  public copiesTitles: string[];
+  public numberFormat: string;
+
   @Input('invoice') invoice: InvoiceGst;
-  @Input('copies') copies: Array<string>;
+  @Input('copies') set copies (value: number) {
+    if (value === 2) {
+      this.copiesTitles = ['Original for Recipient', 'Duplicate for Supplier'];
+    } else if (value === 3) {
+      this.copiesTitles = ['Original for Recipient', 'Duplicate for Transporter', 'Triplicate for Supplier'];
+    }
+  }
+  @Input('fullRounding') set fullRounding(value: boolean) {
+    this.numberFormat = value ? '1.0-0' : '1.2-2';
+  }
 
   constructor() {
 
@@ -17,8 +29,7 @@ export class InvoiceGstPrintComponent implements OnInit {
   ngOnInit() {
   }
 
-  print(invoice: InvoiceGst): void {
-    this.invoice = invoice;
+  print(): void {
     let printContents, popupWin;
     printContents = document.getElementById('invoice-gst-print').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');

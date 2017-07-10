@@ -1,5 +1,5 @@
-<div id="invoice-gst-print" style="display: none;">
-  <div *ngFor="let copyTitle of copies">
+<div id="invoice-gst-print" *ngIf="invoice" style="display: none;">
+  <div *ngFor="let copyTitle of copiesTitles">
   <div style="page-break-after: always">
     <div class="col-lg-12 invoice-preview invoice-gst-page" style="padding: 0;">
       <div class="invoice-details">
@@ -18,7 +18,7 @@
             </tr>
             <tr>
               <td class="text-right" style="padding-right: 15px;">Invoice Date:</td>
-              <td class="text-center">{{invoice.date}}</td>
+              <td class="text-center">{{invoice.date | date: 'dd-MM-yyyy' }}</td>
             </tr>
           </table>
         </div>
@@ -55,11 +55,11 @@
       <div class="clearfix"></div>
       <table class="invoice-item">
         <colgroup></colgroup>
-        <colgroup style="width: 52%;"></colgroup>
+        <colgroup style="width: 100%;"></colgroup>
         <colgroup style="width: 0;"></colgroup>
-        <colgroup style="width: 16%;"></colgroup>
-        <colgroup style="width: 16%;"></colgroup>
-        <colgroup style="width: 16%;"></colgroup>
+        <colgroup style="width: 0;"></colgroup>
+        <colgroup style="width: 0;"></colgroup>
+        <colgroup style="width: 0;"></colgroup>
         <colgroup style="width: 0;"></colgroup>
         <colgroup style="width: 0;"></colgroup>
         <colgroup style="width: 0;"></colgroup>
@@ -85,12 +85,12 @@
           <td class="item-hsn item-value">{{invoiceItem.hsn}}</td>
           <td class="item-qty item-value">{{invoiceItem.quantity| number: '1.0-0'}}</td>
           <td class="item-rate item-value currency">{{invoiceItem.unitPrice | number: '1.2-2'}}</td>
-          <td class="item-total item-value currency">{{invoiceItem.amount | number: '1.2-2'}}</td>
-          <td class="item-gst item-value currency">{{invoiceItem.cgstValue | number: '1.2-2'}}<p
+          <td class="item-total item-value currency">{{invoiceItem.amount | number: numberFormat}}</td>
+          <td class="item-gst item-value currency">{{invoiceItem.cgstValue | number: numberFormat}}<p
             class="item-gst-percent">({{invoiceItem.cgst}}%)</p></td>
-          <td class="item-gst item-value currency">{{invoiceItem.sgstValue | number: '1.2-2'}}<p
+          <td class="item-gst item-value currency">{{invoiceItem.sgstValue | number: numberFormat}}<p
             class="item-gst-percent">({{invoiceItem.sgst}}%)</p></td>
-          <td class="item-gst item-value currency">{{invoiceItem.igstValue | number: '1.2-2'}}<p
+          <td class="item-gst item-value currency">{{invoiceItem.igstValue | number: numberFormat}}<p
             class="item-gst-percent">({{invoiceItem.igst}}%)</p></td>
         </tr>
         <tr>
@@ -110,89 +110,102 @@
           <td class="item-hsn item-value"></td>
           <td class="item-qty item-value"></td>
           <td class="item-rate item-value currency"></td>
-          <td class="item-total item-value currency">{{invoice.amount | number: '1.2-2'}}</td>
-          <td class="item-gst item-value currency">{{invoice.totalCGSTValue | number: '1.2-2'}}</td>
-          <td class="item-gst item-value currency">{{invoice.totalSGSTValue | number: '1.2-2'}}</td>
-          <td class="item-gst item-value currency">{{invoice.totalIGSTValue | number: '1.2-2'}}</td>
+          <td class="item-total item-value currency">{{invoice.amount | number: '1.0-0'}}</td>
+          <td class="item-gst item-value currency">{{invoice.totalCGSTValue | number: '1.0-0'}}</td>
+          <td class="item-gst item-value currency">{{invoice.totalSGSTValue | number: '1.0-0'}}</td>
+          <td class="item-gst item-value currency">{{invoice.totalIGSTValue | number: '1.0-0'}}</td>
         </tr>
         </tbody>
         <tfoot>
         <tr>
-          <td rowspan="3" colspan="4" class="invoice-add-details">
-            <p class="amount-word-title">Amount chargeable (in words)</p>
-            <p class="amount-word">{{getNumberText(invoice.grandTotal)}}</p>
-          </td>
-          <td colspan="3" class="title sub-total-title">Total Amount Before Tax</td>
-          <td colspan="2" class="amount sub-total currency" style="border-right: 1px solid black;">{{invoice.amount |
-            number: '1.0-0'}}
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" class="title gst-component-title">Add - CGST</td>
-          <td colspan="2" class="amount gst-component currency" style="border-right: 1px solid black;">
-            {{invoice.totalCGSTValue | number: '1.0-0'}}
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" class="title gst-component-title">Add - SGST</td>
-          <td colspan="2" class="amount gst-component currency" style="border-right: 1px solid black;">
-            {{invoice.totalSGSTValue | number: '1.0-0'}}
-          </td>
-        </tr>
-        <tr>
-          <td rowspan="4" colspan="4" class="bank-details-td">
-            <b>BANK DETAILS</b>
-            <table style="width: 100%;" class="bank-details">
-              <colgroup style="width: 30%;"></colgroup>
-              <colgroup style="width: 70%;"></colgroup>
-              <tbody>
+          <td colspan="9" style="border-right: 1px solid black;">
+            <table style="width: 100%;">
+              <colgroup style="width: 50%;"></colgroup>
+              <colgroup style="width: 50%;"></colgroup>
               <tr>
-                <td>Account Name:</td>
-                <td>VST Associated Graphics Pvt. Ltd.</td>
+                <td style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px;">
+                  <div class="invoice-add-details">
+                    <p class="amount-word-title">Amount chargeable (in words)</p>
+                    <p class="amount-word">{{getNumberText(invoice.grandTotal)}}</p>
+                  </div>
+                  <div class="bank-details-td">
+                    <b>BANK DETAILS</b>
+                    <table style="width: 100%;" class="bank-details">
+                      <colgroup style="width: 30%;"></colgroup>
+                      <colgroup style="width: 70%;"></colgroup>
+                      <tbody>
+                      <tr>
+                        <td>Account Name:</td>
+                        <td>VST Associated Graphics Pvt. Ltd.</td>
+                      </tr>
+                      <tr>
+                        <td>Account Number:</td>
+                        <td>410700050900021</td>
+                      </tr>
+                      <tr>
+                        <td>Bank:</td>
+                        <td>Tamilnad Mercantile Bank</td>
+                      </tr>
+                      <tr>
+                        <td>Branch:</td>
+                        <td>Nerkundram</td>
+                      </tr>
+                      <tr>
+                        <td>IFS Code:</td>
+                        <td>TMBL0000410</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+                <td style="border-right: 0;">
+                  <table style="width: 100%;" class="total-table">
+                    <tbody style="border-bottom: 0;">
+                    <tr>
+                      <td class="title sub-total-title" style="padding-top: 10px;">Total Amount Before Tax</td>
+                      <td class="amount sub-total currency">{{invoice.amount | number: '1.0-0'}}
+                    </tr>
+                    <tr>
+                      <td class="title gst-component-title">Add - CGST</td>
+                      <td class="amount gst-component currency">
+                        {{invoice.totalCGSTValue | number: '1.0-0'}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="title gst-component-title">Add - SGST</td>
+                      <td class="amount gst-component currency">
+                        {{invoice.totalSGSTValue | number: '1.0-0'}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="title gst-component-title">Add - IGST</td>
+                      <td class="amount gst-component currency">
+                        {{invoice.totalIGSTValue | number: '1.0-0'}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="title gst-title">Total GST</td>
+                      <td class="amount gst currency">
+                        {{invoice.totalGSTValue | number: '1.0-0'}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="title grand-total-title">Total Amount After Tax</td>
+                      <td class="amount grand-total currency">
+                        {{invoice.grandTotal | number: '1.0-0'}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="title gst-component-title" style="padding-bottom: 10px;">
+                        GST Payable on Reverse Charge
+                      </td>
+                      <td colspan="1" class="amount gst-component currency" style="vertical-align: initial;">NA</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
               </tr>
-              <tr>
-                <td>Account Number:</td>
-                <td>410700050900021</td>
-              </tr>
-              <tr>
-                <td>Bank:</td>
-                <td>Tamilnad Mercantile Bank</td>
-              </tr>
-              <tr>
-                <td>Branch:</td>
-                <td>Nerkundram</td>
-              </tr>
-              <tr>
-                <td>IFS Code:</td>
-                <td>TMBL0000410</td>
-              </tr>
-              </tbody>
             </table>
-          </td>
-          <td colspan="3" class="title gst-component-title">Add - IGST</td>
-          <td colspan="2" class="amount gst-component currency" style="border-right: 1px solid black;">
-            {{invoice.totalIGSTValue | number: '1.0-0'}}
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" class="title gst-title">Total GST</td>
-          <td colspan="2" class="amount gst currency" style="border-right: 1px solid black;">{{invoice.totalGSTValue |
-            number: '1.0-0'}}
-          </td>
-        </tr>
-        <tr class="grand-total-row">
-          <td colspan="3" class="title grand-total-title">Total Amount After Tax</td>
-          <td colspan="2" class="amount grand-total currency" style="border-right: 1px solid black;">
-            {{invoice.grandTotal | number: '1.0-0'}}
-          </td>
-        </tr>
-        <tr class="grand-total-row">
-          <td colspan="4" class="title gst-component-title"
-              style="border-bottom: 1px solid black; padding-bottom: 10px;">
-            GST Payable on Reverse Charge
-          </td>
-          <td colspan="1" class="amount gst-component currency"
-              style="border-right: 1px solid black; border-bottom: 1px solid black; padding-bottom: 10px;">NA
           </td>
         </tr>
         </tfoot>

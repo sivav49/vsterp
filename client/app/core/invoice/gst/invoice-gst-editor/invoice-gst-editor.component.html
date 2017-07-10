@@ -52,7 +52,7 @@
           </div>
           <div class="form-group">
             <label class="control-label" for="date">Date:</label>
-            <input type="text" id="date"
+            <input type="date" id="date"
                    formControlName="date"
                    class="form-control">
           </div>
@@ -231,12 +231,7 @@
             <hr>
           </ng-container>
         </ng-container>
-        <div class="col-md-4 col-sm-6">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="button" class="btn btn-primary" (click)="onPrint()">Print
-          </button>
-        </div>
-        <div class="form-horizontal col-md-4 col-md-push-4 col-sm-6">
+        <div class="form-horizontal col-md-4 col-md-push-8 col-sm-6">
           <div class="form-group text-right">
             <label class="col-sm-6 control-label" for="amount">Total Amount</label>
             <div class="col-sm-6">
@@ -259,10 +254,31 @@
             </div>
           </div>
         </div>
-        <div class="clearfix"></div>
       </form>
-      <!--<p>{{invoiceForm.value | json}}</p>-->
-      <app-invoice-gst-print #previewtax [invoice]="invoiceForm.value" [copies]="['Original for Recipient', 'Duplicate for Transporter', 'Triplicate for Supplier']"></app-invoice-gst-print>
+      <div class="col-md-4 col-md-pull-4 col-sm-6">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" [disabled]="!invoiceService.active || invoiceForm.dirty" (click)="onPrint()">Print
+        </button>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" [(ngModel)]="fullRounding"> Enable full rounding
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="copiesOption" [(ngModel)]="copies" [value]="2" [checked]="copies === 2">
+            Copies 1 & 2
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="copiesOption" [(ngModel)]="copies" [value]="3">
+            Copies 1, 2 & 3
+          </label>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <app-invoice-gst-print #previewtax [invoice]="invoiceService.active" [fullRounding]="fullRounding" [copies]="copies"></app-invoice-gst-print>
     </div>
   </div>
 </div>
