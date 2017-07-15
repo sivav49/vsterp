@@ -24,13 +24,11 @@ import {InvoiceGstListComponent} from './core/invoice/gst/invoice-gst-list/invoi
 import {InvoiceGstEditorComponent} from './core/invoice/gst/invoice-gst-editor/invoice-gst-editor.component';
 import {InvoiceGstComponent} from './core/invoice/gst/invoice-gst.component';
 import {InvoiceGstGetResolve} from './core/invoice/gst/invoice-gst.service';
-
-enum EditorMode {
-  None,
-  Create,
-  View,
-  Edit
-}
+import {EditorMode} from './core/invoice/invoice-editor';
+import {InvoiceBosComponent} from './core/invoice/bos/invoice-bos.component';
+import {InvoiceBosListComponent} from './core/invoice/bos/invoice-bos-list/invoice-bos-list.component';
+import {InvoiceBosEditorComponent} from './core/invoice/bos/invoice-bos-editor/invoice-bos-editor.component';
+import {InvoiceBosGetResolve} from './core/invoice/bos/invoice-bos.service';
 
 export const ROUTES: Routes = [{
   path: '', redirectTo: 'invoice-gst', pathMatch: 'full'
@@ -126,6 +124,37 @@ export const ROUTES: Routes = [{
         },
         resolve: {
           invoice: InvoiceGstGetResolve
+        }
+      }
+      ]
+    },
+    {
+      path: 'invoice-bos', component: InvoiceBosComponent,
+      children: [{
+        path: '', component: InvoiceBosListComponent
+      }, {
+        path: 'create',
+        component: InvoiceBosEditorComponent,
+        data: {
+          mode: EditorMode.Create
+        }
+      }, {
+        path: ':id',
+        component: InvoiceBosEditorComponent,
+        data: {
+          mode: EditorMode.View,
+        },
+        resolve: {
+          invoice: InvoiceBosGetResolve
+        }
+      }, {
+        path: ':id/edit',
+        component: InvoiceBosEditorComponent,
+        data: {
+          mode: EditorMode.Edit
+        },
+        resolve: {
+          invoice: InvoiceBosGetResolve
         }
       }
       ]

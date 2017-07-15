@@ -5,7 +5,8 @@ function getApiMethods(InvoiceModel) {
     Invoice.get(invoiceNo)
       .then((data) => {
         req.invoice = data;
-        return next();
+        next();
+        return null;
       })
       .catch(e => next(e));
   };

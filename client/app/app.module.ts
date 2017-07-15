@@ -38,6 +38,11 @@ import { InvoiceGstComponent } from './core/invoice/gst/invoice-gst.component';
 import { InvoiceGstEditorComponent } from './core/invoice/gst/invoice-gst-editor/invoice-gst-editor.component';
 import { InvoiceGstPrintComponent } from './core/invoice/gst/invoice-gst-print/invoice-gst-print.component';
 import { InvoiceGstGetResolve, InvoiceGstService } from './core/invoice/gst/invoice-gst.service';
+import { InvoiceBosComponent } from './core/invoice/bos/invoice-bos.component';
+import { InvoiceBosListComponent } from './core/invoice/bos/invoice-bos-list/invoice-bos-list.component';
+import { InvoiceBosEditorComponent } from './core/invoice/bos/invoice-bos-editor/invoice-bos-editor.component';
+import { InvoiceBosPrintComponent } from './core/invoice/bos/invoice-bos-print/invoice-bos-print.component';
+import {InvoiceBosGetResolve, InvoiceBosService} from './core/invoice/bos/invoice-bos.service';
 
 @NgModule({
   declarations: [
@@ -63,6 +68,10 @@ import { InvoiceGstGetResolve, InvoiceGstService } from './core/invoice/gst/invo
     InvoiceGstComponent,
     InvoiceGstEditorComponent,
     InvoiceGstPrintComponent,
+    InvoiceBosComponent,
+    InvoiceBosListComponent,
+    InvoiceBosEditorComponent,
+    InvoiceBosPrintComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,6 +92,8 @@ import { InvoiceGstGetResolve, InvoiceGstService } from './core/invoice/gst/invo
     InvoiceVatGetResolve,
     InvoiceGstService,
     InvoiceGstGetResolve,
+    InvoiceBosService,
+    InvoiceBosGetResolve,
     PopupService,
     {provide: LOCALE_ID, useValue: 'en-IN'}],
   bootstrap: [AppComponent]

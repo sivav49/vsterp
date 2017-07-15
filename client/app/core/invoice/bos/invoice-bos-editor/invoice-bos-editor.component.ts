@@ -1,25 +1,25 @@
 import {Component, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormArray, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, Validators} from '@angular/forms';
 import * as moment from 'moment';
 
 import {CustomValidators} from '../../../../shared/CustomValidators';
 
-import {InvoiceGst} from '../invoice-gst.model';
-import {InvoiceGstService} from '../invoice-gst.service';
-import {InvoiceGstPrintComponent} from '../invoice-gst-print/invoice-gst-print.component';
+import {InvoiceBosService} from '../invoice-bos.service';
 import {EditorMode, InvoiceEditor} from '../../invoice-editor';
+import {InvoiceBos} from '../invoice-bos.model';
+import {InvoiceBosPrintComponent} from '../invoice-bos-print/invoice-bos-print.component';
 
 
 @Component({
-  selector: 'app-invoice-gst-editor',
-  templateUrl: './invoice-gst-editor.component.html',
-  styleUrls: ['./invoice-gst-editor.component.scss']
+  selector: 'app-invoice-bos-editor',
+  templateUrl: './invoice-bos-editor.component.html',
+  styleUrls: ['./invoice-bos-editor.component.scss']
 })
-export class InvoiceGstEditorComponent extends InvoiceEditor<InvoiceGst> {
-  @ViewChild('previewtax') preview: InvoiceGstPrintComponent;
+export class InvoiceBosEditorComponent extends InvoiceEditor<InvoiceBos> {
+  @ViewChild('previewtax') preview: InvoiceBosPrintComponent;
 
-  constructor(invoiceService: InvoiceGstService,
+  constructor(invoiceService: InvoiceBosService,
               router: Router,
               activatedRoute: ActivatedRoute,
               fb: FormBuilder) {
@@ -27,7 +27,7 @@ export class InvoiceGstEditorComponent extends InvoiceEditor<InvoiceGst> {
   }
 
   onSubmit() {
-    const invoice = InvoiceGst.convertFromFormGroup(this.invoiceForm);
+    const invoice = InvoiceBos.convertFromFormGroup(this.invoiceForm);
     super.onSubmit(invoice);
   }
 
@@ -46,9 +46,8 @@ export class InvoiceGstEditorComponent extends InvoiceEditor<InvoiceGst> {
       consigneeStateCode: '',
       consigneeGSTIN: '',
       items: this.fb.array([]),
-      amount: 0,
-      totalGSTValue: 0,
-      grandTotal: 0,
+      amount: '',
+      grandTotal: '',
     });
     this.onAddInvoiceItem(0);
   }
@@ -60,11 +59,7 @@ export class InvoiceGstEditorComponent extends InvoiceEditor<InvoiceGst> {
       hsn: item.hsn || '',
       quantity: item.quantity || 0,
       unitPrice: item.unitPrice || 0,
-      amount: 0,
-      cgst: item.cgst || 0,
-      sgst: item.sgst || 0,
-      igst: item.igst || 0,
-      itemTax: 0
+      amount: 0
     });
 
     itemFG.get('quantity').valueChanges.subscribe(
@@ -77,26 +72,11 @@ export class InvoiceGstEditorComponent extends InvoiceEditor<InvoiceGst> {
         this.updateComputedValues();
       }
     );
-    itemFG.get('cgst').valueChanges.subscribe(
-      () => {
-        this.updateComputedValues();
-      }
-    );
-    itemFG.get('sgst').valueChanges.subscribe(
-      () => {
-        this.updateComputedValues();
-      }
-    );
-    itemFG.get('igst').valueChanges.subscribe(
-      () => {
-        this.updateComputedValues();
-      }
-    );
 
     return itemFG;
   }
 
-  protected setInvoiceForm(invoice: InvoiceGst) {
+  protected setInvoiceForm(invoice: InvoiceBos) {
     const invoiceItemFGs = invoice.items.map((item) => this.createItemFormGroup(item));
     const invoiceItemFormArray = this.fb.array(invoiceItemFGs);
     this.invoiceForm.setControl('items', invoiceItemFormArray);
@@ -126,20 +106,17 @@ export class InvoiceGstEditorComponent extends InvoiceEditor<InvoiceGst> {
   }
 
   protected updateComputedValues() {
-    const invoice = InvoiceGst.convertFromFormGroup(this.invoiceForm);
+    const invoice = InvoiceBos.convertFromFormGroup(this.invoiceForm);
 
     const itemFGs = this.invoiceForm.get('items') as FormArray;
     itemFGs.controls.forEach((item, index) => {
       const invItem = invoice.items[index];
       if (invItem) {
         item.get('amount').setValue(invItem.amount);
-        item.get('itemTax').setValue(invItem.itemTax);
       }
     });
 
     this.invoiceForm.get('amount').setValue(invoice.amount);
-    this.invoiceForm.get('totalGSTValue').setValue(invoice.totalGSTValue);
-    this.invoiceForm.get('grandTotal').setValue(invoice.grandTotal);
   }
 
   onPrint() {

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {InvoiceVat, InvoiceVatItem} from '../invoice-vat.model';
-import * as numberToText from 'number2text';
+import {amountInWords} from '../../../../shared/number-to-text';
 
 @Component({
   selector: 'app-invoice-vat-print',
@@ -56,8 +56,6 @@ export class InvoiceVatPrintComponent implements OnInit {
   }
 
   getNumberText(number) {
-    let words = numberToText(number, 'indian', true);
-    words = words.replace('only', 'Only');
-    return words;
+    return amountInWords(number);
   }
 }
