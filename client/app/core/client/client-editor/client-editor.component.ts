@@ -85,6 +85,7 @@ export class ClientEditorComponent implements OnInit {
       email: '',
       phone: '',
       tin: '',
+      gstin: '',
     });
   }
 
@@ -100,6 +101,7 @@ export class ClientEditorComponent implements OnInit {
       email: client.email,
       phone: client.phone,
       tin: client.tin,
+      gstin: client.gstin
     });
   }
 

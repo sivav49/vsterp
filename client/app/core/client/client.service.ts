@@ -21,21 +21,18 @@ export class ClientService {
 
   public activeClient: Client;
 
-  private static assignIdToNickName(client: Client) {
-    if (client._id) {
-      client.nickName = client._id;
-    }
-  }
-
-  private static extractData(res: Response) {
+  private static extractData(res: Response): Client[] | Client {
     const body = res.json();
     const data = body.data || {};
     if (Array.isArray(data)) {
-      data.map((client) => ClientService.assignIdToNickName(client));
+      const clients: Client[] = [];
+      for (const client of data) {
+        clients.push(Client.convertFromAny(client));
+      }
+      return clients;
     } else {
-      ClientService.assignIdToNickName(data);
+      return Client.convertFromAny(data);
     }
-    return data;
   }
 
   private static handleError(error: Response | any) {

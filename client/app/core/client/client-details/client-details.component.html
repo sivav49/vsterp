@@ -27,30 +27,34 @@
   </div>
   <div class="mail-box">
     <div class="mail-body">
-      <div class="col-sm-6">
+      <div class="col-sm-6 form-horizontal">
         <div class="form-group">
-          <label class="col-sm-4">Company Name</label>
-          <label class="col-sm-8">{{client.name}}</label>
+          <label class="col-sm-4 control-label">Company Name</label>
+          <label class="col-sm-8 form-control-static">{{client.name}}</label>
         </div>
         <div class="form-group">
-          <label class="col-sm-4">Nick Name</label>
-          <label class="col-sm-8">{{client.nickName}}</label>
+          <label class="col-sm-4 control-label">Nick Name</label>
+          <label class="col-sm-8 form-control-static">{{client.nickName}}</label>
         </div>
         <div class="form-group">
-          <label class="col-sm-4">Address </label>
-          <label class="col-sm-8">{{client.addrl1}}</label>
-          <label class="col-sm-8 col-sm-offset-4">{{client.addrl2}}</label>
-          <label class="col-sm-8 col-sm-offset-4">{{client.state}}</label>
-          <label class="col-sm-8 col-sm-offset-4">{{client.city}}</label>
-          <label class="col-sm-8 col-sm-offset-4">{{client.pincode}}</label>
+          <label class="col-sm-4 control-label">Address </label>
+          <label class="col-sm-8 form-control-static client-address">{{client.getAddress()}}</label>
         </div>
         <div class="form-group">
-          <label class="col-sm-4">Phone</label>
-          <label class="col-sm-8">{{client.phone}}</label>
+          <label class="col-sm-4 control-label">State</label>
+          <label class="col-sm-8 form-control-static">{{client.state}}</label>
         </div>
         <div class="form-group">
-          <label class="col-sm-4">TIN</label>
-          <label class="col-sm-8">{{client.tin}}</label>
+          <label class="col-sm-4 control-label">Phone</label>
+          <label class="col-sm-8 form-control-static">{{client.phone}}</label>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-4 control-label">TIN</label>
+          <label class="col-sm-8 form-control-static">{{client.tin}}</label>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-4 control-label">GSTIN</label>
+          <label class="col-sm-8 form-control-static">{{client.gstin}}</label>
         </div>
       </div>
       <div class="clearfix"></div>
