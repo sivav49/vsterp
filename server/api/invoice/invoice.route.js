@@ -1,22 +1,22 @@
 let express = require('express');
 let validate = require('express-validation');
-let controller = require('./invoice.controller');
+let invoiceController = require('./invoice.controller');
 
 function getRouter(InvoiceModel) {
   const router = express.Router();
 
-  const vatController = controller(InvoiceModel);
+  const controller = invoiceController(InvoiceModel);
 
   router.route('/')
-    .get(vatController.list)
-    .post(validate(InvoiceModel.paramValidation.create), vatController.create);
+    .get(controller.list)
+    .post(validate(InvoiceModel.paramValidation.create), controller.create);
 
   router.route('/:_id')
-    .get(vatController.get)
-    .put(validate(InvoiceModel.paramValidation.update), vatController.update)
-    .delete(vatController.remove);
+    .get(controller.get)
+    .put(validate(InvoiceModel.paramValidation.update), controller.update)
+    .delete(controller.remove);
 
-  router.param('_id', vatController.load);
+  router.param('_id', controller.load);
 
   return router;
 }

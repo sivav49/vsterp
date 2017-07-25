@@ -69,6 +69,40 @@ invoiceSchema.statics = {
       .exec();
   },
 
+  getModelFromRequest(req) {
+    let body = req.body;
+    let res = req.modelObj;
+    if (!res) {
+      res = new this();
+    }
+    let items = [];
+    let i, length = body.items.length;
+    for (i = 0; i < length; i++) {
+      let item = body.items[i];
+      items.push({
+        no: i,
+        description: item.description,
+        hsn: item.hsn,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+      });
+    }
+    res.recipientName = body.recipientName;
+    res.recipientAddress = body.recipientAddress;
+    res.recipientState = body.recipientState;
+    res.recipientStateCode = body.recipientStateCode;
+    res.recipientGSTIN = body.recipientGSTIN;
+    res.consigneeName = body.consigneeName;
+    res.consigneeAddress = body.consigneeAddress;
+    res.consigneeState = body.consigneeState;
+    res.consigneeStateCode = body.consigneeStateCode;
+    res.consigneeGSTIN = body.consigneeGSTIN;
+    res.date = moment.utc(moment(body.date).format('DD-MM-YYYY'), 'DD-MM-YYYY');
+    res.items = items;
+
+    return res;
+  },
+
   getNextInvoiceNo() {
     return this.findOne({}, '_id').sort({_id: -1}).then(
       (invoice) => {
@@ -83,42 +117,6 @@ invoiceSchema.statics = {
 };
 
 const Invoice = mongoose.model('InvoiceBos', invoiceSchema);
-
-
-function getModelFromRequest(req) {
-  let body = req.body;
-  let res = req.invoice;
-  if (!res) {
-    res = new Invoice();
-  }
-  let items = [];
-  let i, length = body.items.length;
-  for (i = 0; i < length; i++) {
-    let item = body.items[i];
-    items.push({
-      no: i,
-      description: item.description,
-      hsn: item.hsn,
-      quantity: item.quantity,
-      unitPrice: item.unitPrice,
-    });
-  }
-  res.recipientName = body.recipientName;
-  res.recipientAddress = body.recipientAddress;
-  res.recipientState = body.recipientState;
-  res.recipientStateCode = body.recipientStateCode;
-  res.recipientGSTIN = body.recipientGSTIN;
-  res.consigneeName = body.consigneeName;
-  res.consigneeAddress = body.consigneeAddress;
-  res.consigneeState = body.consigneeState;
-  res.consigneeStateCode = body.consigneeStateCode;
-  res.consigneeGSTIN = body.consigneeGSTIN;
-  res.date = moment.utc(moment(body.date).format('DD-MM-YYYY'), 'DD-MM-YYYY');
-  res.items = items;
-
-  return res;
-}
-
 
 const invoiceItemSchema = Joi.object({
   description: Joi.string().required(),
@@ -175,7 +173,6 @@ const paramValidation = {
 
 let InvoiceBosModel = {
   Invoice,
-  getModelFromRequest,
   paramValidation
 };
 

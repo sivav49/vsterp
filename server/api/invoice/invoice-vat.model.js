@@ -59,6 +59,35 @@ invoiceSchema.statics = {
       .exec();
   },
 
+  getModelFromRequest(req) {
+    let body = req.body;
+    let res = req.modelObj;
+    if(!res) {
+      res = new this();
+    }
+    let items = [];
+    let i, length = body.items.length;
+    for (i = 0; i < length; i++) {
+      let item = body.items[i];
+      items.push({
+        no: i,
+        description: item.description,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice
+      });
+    }
+    res.clientName = body.clientName;
+    res.clientAddress = body.clientAddress;
+    res.clientTIN = body.clientTIN;
+    res.dcNo = body.dcNo;
+    res.date = moment.utc(moment(body.date).format('DD-MM-YYYY'), 'DD-MM-YYYY');
+    res.description = body.description;
+    res.items = items;
+    res.vatPercent = body.vatPercent;
+
+    return res;
+  },
+
   getNextInvoiceNo() {
     return this.findOne({}, '_id').sort({_id: -1}).then(
       (invoice) => {
@@ -69,35 +98,6 @@ invoiceSchema.statics = {
 };
 
 const Invoice = mongoose.model('Invoice', invoiceSchema);
-
-function getModelFromRequest(req) {
-  let body = req.body;
-  let res = req.invoice;
-  if(!res) {
-    res = new Invoice();
-  }
-  let items = [];
-  let i, length = body.items.length;
-  for (i = 0; i < length; i++) {
-    let item = body.items[i];
-    items.push({
-      no: i,
-      description: item.description,
-      quantity: item.quantity,
-      unitPrice: item.unitPrice
-    });
-  }
-  res.clientName = body.clientName;
-  res.clientAddress = body.clientAddress;
-  res.clientTIN = body.clientTIN;
-  res.dcNo = body.dcNo;
-  res.date = moment.utc(moment(body.date).format('DD-MM-YYYY'), 'DD-MM-YYYY');
-  res.description = body.description;
-  res.items = items;
-  res.vatPercent = body.vatPercent;
-
-  return res;
-}
 
 const invoiceItemSchema = Joi.object({
   description: Joi.string().required(),
@@ -144,7 +144,6 @@ const paramValidation = {
 
 let InvoiceVatModel = {
   Invoice,
-  getModelFromRequest,
   paramValidation
 };
 

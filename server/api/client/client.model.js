@@ -22,6 +22,7 @@ let clientSchema = new Schema({
   city: {type: String},
   pincode: {type: String},
   tin: {type: String},
+  gstin: {type: String},
   email: {type: String},
   phone: {type: String},
 });
@@ -47,30 +48,31 @@ clientSchema.statics = {
       .skip(+skip)
       .limit(+limit)
       .exec();
+  },
+
+  getModelFromRequest(req) {
+    let body = req.body;
+    let res = req.modelObj;
+    if (!res) {
+      res = new this();
+      res._id = body._id;
+    }
+    res.name = body.name;
+    res.addrl1 = body.addrl1;
+    res.addrl2 = body.addrl2;
+    res.state = body.state;
+    res.city = body.city;
+    res.pincode = body.pincode;
+    res.tin = body.tin;
+    res.gstin = body.gstin;
+    res.email = body.email;
+    res.phone = body.phone;
+
+    return res;
   }
 };
 
 const Client = mongoose.model('Client', clientSchema);
-
-function getModelFromRequest(req) {
-  let body = req.body;
-  let res = req.clientData;
-  if(!res) {
-    res = new Client();
-    res._id = body._id;
-  }
-  res.name = body.name;
-  res.addrl1 = body.addrl1;
-  res.addrl2 = body.addrl2;
-  res.state = body.state;
-  res.city = body.city;
-  res.pincode = body.pincode;
-  res.tin = body.tin;
-  res.email = body.email;
-  res.phone = body.phone;
-
-  return res;
-}
 
 const paramValidation = {
   create: {
@@ -83,6 +85,7 @@ const paramValidation = {
       city: Joi.string().allow(''),
       pincode: Joi.string().allow(''),
       tin: Joi.string().allow(''),
+      gstin: Joi.string().allow(''),
       email: Joi.string().allow(''),
       phone: Joi.string().allow(''),
     }
@@ -97,6 +100,7 @@ const paramValidation = {
       city: Joi.string().allow(''),
       pincode: Joi.string().allow(''),
       tin: Joi.string().allow(''),
+      gstin: Joi.string().allow(''),
       email: Joi.string().allow(''),
       phone: Joi.string().allow(''),
     },
@@ -106,4 +110,4 @@ const paramValidation = {
   },
 };
 
-module.exports = {Client, getModelFromRequest, paramValidation};
+module.exports = {Client, paramValidation};
