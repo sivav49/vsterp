@@ -14,7 +14,7 @@
               <colgroup style="width: 90px;"></colgroup>
               <tr>
                 <td class="text-right" style="padding-right: 15px;">Invoice No:</td>
-                <td class="text-center">{{formatBillNumber(invoice._id)}}</td>
+                <td class="text-center">{{formatBillNumber()}}</td>
               </tr>
               <tr>
                 <td class="text-right" style="padding-right: 15px;">Invoice Date:</td>
@@ -120,10 +120,10 @@
           <tr>
             <td colspan="9" style="border-right: 1px solid black;">
               <table style="width: 100%;">
-                <colgroup style="width: 50%;"></colgroup>
-                <colgroup style="width: 50%;"></colgroup>
+                <colgroup style="width: 55%;"></colgroup>
+                <colgroup style="width: 45%;"></colgroup>
                 <tr>
-                  <td style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px;">
+                  <td style="padding: 10px 20px;">
                     <div class="invoice-add-details">
                       <p class="amount-word-title">Amount chargeable (in words)</p>
                       <p class="amount-word">{{getNumberText(invoice.grandTotal)}}</p>
@@ -131,8 +131,8 @@
                     <div class="bank-details-td">
                       <b>BANK DETAILS</b>
                       <table style="width: 100%;" class="bank-details">
-                        <colgroup style="width: 30%;"></colgroup>
-                        <colgroup style="width: 70%;"></colgroup>
+                        <colgroup style="width: 35%;"></colgroup>
+                        <colgroup style="width: 65%;"></colgroup>
                         <tbody>
                         <tr>
                           <td>Account Name:</td>

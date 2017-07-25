@@ -5,10 +5,12 @@ import * as moment from 'moment';
 
 import {CustomValidators} from '../../../../shared/CustomValidators';
 
-import {InvoiceGst} from '../invoice-gst.model';
+import {InvoiceGst, InvoiceGstItem} from '../invoice-gst.model';
 import {InvoiceGstService} from '../invoice-gst.service';
-import {InvoiceGstPrintComponent} from '../invoice-gst-print/invoice-gst-print.component';
 import {EditorMode, InvoiceEditor} from '../../invoice-editor';
+import {InvoiceGstPrintComponent} from '../invoice-gst-print/invoice-gst-print.component';
+import {ClientService} from '../../../client/client.service';
+import {Client} from '../../../client/client.model';
 
 
 @Component({
@@ -19,11 +21,14 @@ import {EditorMode, InvoiceEditor} from '../../invoice-editor';
 export class InvoiceGstEditorComponent extends InvoiceEditor<InvoiceGst> {
   @ViewChild('previewtax') preview: InvoiceGstPrintComponent;
 
+  protected basePath = '/invoice-gst';
+
   constructor(invoiceService: InvoiceGstService,
+              clientService: ClientService,
               router: Router,
               activatedRoute: ActivatedRoute,
               fb: FormBuilder) {
-    super(invoiceService, router, activatedRoute, fb);
+    super(invoiceService, clientService, router, activatedRoute, fb);
   }
 
   onSubmit() {
@@ -31,98 +36,91 @@ export class InvoiceGstEditorComponent extends InvoiceEditor<InvoiceGst> {
     super.onSubmit(invoice);
   }
 
-  protected createForm() {
-    this.invoiceForm = this.fb.group({
-      _id: ['', [Validators.required]],
-      date: ['', [Validators.required, CustomValidators.date]],
-      recipientName: '',
-      recipientAddress: '',
-      recipientState: '',
-      recipientStateCode: '',
-      recipientGSTIN: '',
-      consigneeName: '',
-      consigneeAddress: '',
-      consigneeState: '',
-      consigneeStateCode: '',
-      consigneeGSTIN: '',
-      items: this.fb.array([]),
-      amount: 0,
-      totalGSTValue: 0,
-      grandTotal: 0,
-    });
-    this.onAddInvoiceItem(0);
-  }
-
-  protected createItemFormGroup(item?) {
-    item = item || {};
-    const itemFG = this.fb.group({
-      description: item.description || '',
-      hsn: item.hsn || '',
-      quantity: item.quantity || 0,
-      unitPrice: item.unitPrice || 0,
-      amount: 0,
-      cgst: item.cgst || 0,
-      sgst: item.sgst || 0,
-      igst: item.igst || 0,
-      itemTax: 0
-    });
-
-    itemFG.get('quantity').valueChanges.subscribe(
-      () => {
-        this.updateComputedValues();
-      }
-    );
-    itemFG.get('unitPrice').valueChanges.subscribe(
-      () => {
-        this.updateComputedValues();
-      }
-    );
-    itemFG.get('cgst').valueChanges.subscribe(
-      () => {
-        this.updateComputedValues();
-      }
-    );
-    itemFG.get('sgst').valueChanges.subscribe(
-      () => {
-        this.updateComputedValues();
-      }
-    );
-    itemFG.get('igst').valueChanges.subscribe(
-      () => {
-        this.updateComputedValues();
-      }
-    );
-
-    return itemFG;
-  }
-
-  protected setInvoiceForm(invoice: InvoiceGst) {
+  protected createForm(invoice?: InvoiceGst) {
+    if (!invoice) {
+      invoice = new InvoiceGst(undefined, new Date(), '', '', '', '', '', '', '', '', '', '', [new InvoiceGstItem(0, '', '', 0, 0, 0, 0, 0)]);
+    }
     const invoiceItemFGs = invoice.items.map((item) => this.createItemFormGroup(item));
     const invoiceItemFormArray = this.fb.array(invoiceItemFGs);
-    this.invoiceForm.setControl('items', invoiceItemFormArray);
 
-    this.invoiceForm.patchValue({
-      _id: invoice._id,
-      date: moment(invoice.date).format('YYYY-MM-DD'),
+    this.invoiceForm = this.fb.group({
+      _id: [invoice._id, [Validators.required]],
+      date: [moment(invoice.date).format('YYYY-MM-DD'), [Validators.required, CustomValidators.date]],
+      recipientClientList: invoice.recipientName,
       recipientName: invoice.recipientName,
       recipientAddress: invoice.recipientAddress,
       recipientState: invoice.recipientState,
       recipientStateCode: invoice.recipientStateCode,
       recipientGSTIN: invoice.recipientGSTIN,
+      consigneeClientList: invoice.consigneeName,
       consigneeName: invoice.consigneeName,
       consigneeAddress: invoice.consigneeAddress,
       consigneeState: invoice.consigneeState,
       consigneeStateCode: invoice.consigneeStateCode,
       consigneeGSTIN: invoice.consigneeGSTIN,
-      amount: 0,
-      totalGSTValue: 0,
-      grandTotal: 0
+      items: invoiceItemFormArray,
+      amount: invoice.amount,
+      totalGSTValue: invoice.totalGSTValue,
+      grandTotal: invoice.grandTotal,
     });
-
-    this.updateComputedValues();
-    if (this.mode === EditorMode.View) {
+    if (this.mode === EditorMode.Create || this.mode === EditorMode.Edit) {
+      this.invoiceForm.get('recipientClientList').valueChanges.subscribe(
+        (name) => {
+          const client = this.clientList.find(obj => obj.name === name) as Client;
+          if (client) {
+            this.invoiceForm.patchValue({
+              recipientName: client.name,
+              recipientAddress: client.getAddress(),
+              recipientState: client.state,
+              recipientStateCode: '33',
+              recipientGSTIN: client.gstin,
+            });
+          }
+        }
+      );
+      this.invoiceForm.get('consigneeClientList').valueChanges.subscribe(
+        (name) => {
+          const client = this.clientList.find(obj => obj.name === name) as Client;
+          if (client) {
+            this.invoiceForm.patchValue({
+              consigneeName: client.name,
+              consigneeAddress: client.getAddress(),
+              consigneeState: client.state,
+              consigneeStateCode: '33',
+              consigneeGSTIN: client.gstin,
+            });
+          }
+        }
+      );
+    } else if (this.mode === EditorMode.View) {
       this.invoiceForm.disable();
     }
+  }
+
+  protected createItemFormGroup(item?: InvoiceGstItem) {
+    item = item || new InvoiceGstItem(0, '', '', 0, 0, 0, 0, 0);
+    const itemFG = this.fb.group({
+      description: item.description,
+      hsn: item.hsn,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+      amount: item.amount,
+      cgst: item.cgst,
+      sgst: item.sgst,
+      igst: item.igst,
+      itemTax: item.itemTax
+    });
+
+    const fields = ['quantity', 'unitPrice', 'cgst', 'sgst', 'igst'];
+    for (const field of fields) {
+      itemFG.get(field).valueChanges.subscribe(
+        () => {
+          this.updateComputedValues();
+        }
+      );
+    }
+
+    return itemFG;
   }
 
   protected updateComputedValues() {

@@ -37,20 +37,18 @@
         <td class="col-md-1 bill-no">No</td>
         <td class="col-md-1 bill-date">Date</td>
         <td class="col-md-7 bill-client">Client</td>
-        <td class="col-md-1 bill-total hidden-xs">Amount</td>
-        <td class="col-md-1 bill-total">Total</td>
+        <td class="col-md-1 bill-total hidden-xs">Total</td>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let invoice of invoiceList"
           (click)="setActive(invoice)"
           (dblclick)="viewDetails();"
-          [ngClass]="{active: invoice._id == invoiceService.active._id}">
-        <td>{{ invoice._id }}</td>
+          [ngClass]="{active: invoice._id === invoiceService.active._id}">
+        <td>{{ invoice.getBillNumberText() }}</td>
         <td>{{ invoice.date | date: 'dd-MM-yyyy' }}</td>
         <td>{{ invoice.recipientName }}</td>
-        <td class="data-currency hidden-xs">{{ invoice.amount }}</td>
-        <td class="data-currency">{{ invoice.grandTotal }}</td>
+        <td class="data-currency hidden-xs">{{ invoice.amount | number: '1.0-0' }}</td>
       </tr>
       </tbody>
     </table>

@@ -1,4 +1,4 @@
-<div class="col-lg-10">
+<div class="col-lg-7 form-main-div">
   <div class="mail-box-header">
     <h2>
       View Invoice
@@ -39,10 +39,10 @@
     <!--</div>-->
     <div class="clearfix"></div>
   </div>
-  <div class="mail-box">
+  <div class="mail-box invoice-editor">
     <div class="mail-body">
       <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()" novalidate>
-        <div class="col-md-2 col-sm-6 col-sm-push-8">
+        <div class="col-md-6">
           <div class="form-group">
             <label class="control-label" for="_id">Invoice No:</label>
             <input type="text" id="_id"
@@ -50,6 +50,8 @@
                    class="form-control"
                    readonly>
           </div>
+        </div>
+        <div class="col-md-6">
           <div class="form-group">
             <label class="control-label" for="date">Date:</label>
             <input type="date" id="date"
@@ -57,175 +59,198 @@
                    class="form-control">
           </div>
         </div>
-        <div class="col-md-pull-2 col-sm-8 col-sm-pull-6">
+        <div class="col-md-12">
           <div class="row">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label class="control-label" for="recipientName">Recipient Name</label>
-              <input type="text" id="recipientName"
-                     formControlName="recipientName"
-                     class="form-control">
-            </div>
-            <div class="form-group">
-              <label class="control-label" for="recipientAddress">Recipient Address</label>
-              <textarea id="recipientAddress"
-                        formControlName="recipientAddress"
-                        class="form-control"
-                        rows="3"
-                        style="resize: none;"></textarea>
-            </div>
-            <div class="row">
-              <div class="form-group col-xs-8">
-                <label class="control-label" for="recipientState">Recipient State</label>
-                <input type="text" id="recipientState"
-                       formControlName="recipientState"
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label" for="recipientClientList">Client list for Recipient</label>
+                <select id="recipientClientList"
+                        formControlName="recipientClientList"
+                        class="form-control">
+                  <option *ngFor="let client of clientList" [value]="client.name">{{client.name}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="recipientName">Recipient Name</label>
+                <input type="text" id="recipientName"
+                       formControlName="recipientName"
                        class="form-control">
               </div>
-              <div class="form-group col-xs-4 xs-clear-padding-left">
-                <label class="control-label" for="recipientStateCode">Code</label>
-                <input type="text" id="recipientStateCode"
-                       formControlName="recipientStateCode"
-                       class="form-control">
+              <div class="form-group">
+                <label class="control-label" for="recipientAddress">Recipient Address</label>
+                <textarea id="recipientAddress"
+                          formControlName="recipientAddress"
+                          class="form-control"
+                          rows="3"
+                          style="resize: none;"></textarea>
               </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label" for="recipientGSTIN">Recipient GSTIN</label>
-              <input type="text" id="recipientGSTIN"
-                     formControlName="recipientGSTIN"
-                     class="form-control">
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label class="control-label" for="consigneeName">Consignee Name</label>
-              <input type="text" id="consigneeName"
-                     formControlName="consigneeName"
-                     class="form-control">
-            </div>
-            <div class="form-group">
-              <label class="control-label" for="consigneeAddress">Consignee Address</label>
-              <textarea id="consigneeAddress"
-                        formControlName="consigneeAddress"
-                        class="form-control"
-                        rows="3"
-                        style="resize: none;"></textarea>
-            </div>
-            <div class="row">
-              <div class="form-group col-xs-8">
-                <label class="control-label" for="consigneeState">Consignee State</label>
-                <input type="text" id="consigneeState"
-                       formControlName="consigneeState"
-                       class="form-control">
+              <div class="row">
+                <div class="form-group col-xs-8">
+                  <label class="control-label" for="recipientState">Recipient State</label>
+                  <input type="text" id="recipientState"
+                         formControlName="recipientState"
+                         class="form-control">
+                </div>
+                <div class="form-group col-xs-4 xs-clear-padding-left">
+                  <label class="control-label" for="recipientStateCode">Code</label>
+                  <input type="text" id="recipientStateCode"
+                         formControlName="recipientStateCode"
+                         class="form-control">
+                </div>
               </div>
-              <div class="form-group col-xs-4 xs-clear-padding-left">
-                <label class="control-label" for="consigneeStateCode">Code</label>
-                <input type="text" id="consigneeStateCode"
-                       formControlName="consigneeStateCode"
+              <div class="form-group">
+                <label class="control-label" for="recipientGSTIN">Recipient GSTIN</label>
+                <input type="text" id="recipientGSTIN"
+                       formControlName="recipientGSTIN"
                        class="form-control">
               </div>
             </div>
-            <div class="form-group">
-              <label class="control-label" for="consigneeGSTIN">Consignee GSTIN</label>
-              <input type="text" id="consigneeGSTIN"
-                     formControlName="consigneeGSTIN"
-                     class="form-control">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label" for="consigneeClientList">Client list for Consignee</label>
+                <select id="consigneeClientList"
+                        formControlName="consigneeClientList"
+                        class="form-control">
+                  <option *ngFor="let client of clientList" [value]="client.name">{{client.name}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="consigneeName">Consignee Name</label>
+                <input type="text" id="consigneeName"
+                       formControlName="consigneeName"
+                       class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="consigneeAddress">Consignee Address</label>
+                <textarea id="consigneeAddress"
+                          formControlName="consigneeAddress"
+                          class="form-control"
+                          rows="3"
+                          style="resize: none;"></textarea>
+              </div>
+              <div class="row">
+                <div class="form-group col-xs-8">
+                  <label class="control-label" for="consigneeState">Consignee State</label>
+                  <input type="text" id="consigneeState"
+                         formControlName="consigneeState"
+                         class="form-control">
+                </div>
+                <div class="form-group col-xs-4 xs-clear-padding-left">
+                  <label class="control-label" for="consigneeStateCode">Code</label>
+                  <input type="text" id="consigneeStateCode"
+                         formControlName="consigneeStateCode"
+                         class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="consigneeGSTIN">Consignee GSTIN</label>
+                <input type="text" id="consigneeGSTIN"
+                       formControlName="consigneeGSTIN"
+                       class="form-control">
+              </div>
             </div>
-          </div>
           </div>
         </div>
         <div class="clearfix"></div>
         <hr>
         <ng-container formArrayName="items">
           <ng-container *ngFor="let invoiceItem of items.controls; let i = index;" [formGroupName]="i">
-
-            <div class="col-md-12 col-sm-12">
+            <div class="col-md-12 col-sm-12 invoice-item-editor">
               <div class="row">
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="control-label" for="{{ 'item' + i  + 'Description'}}">{{ 'Item ' + (i+1)}}</label>
-                    <textarea id="{{ 'item' + i  + 'Description'}}"
-                              formControlName="description"
-                              class="form-control" rows="3" style="resize: none;"></textarea>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="item-control-div">
+                      <div class="form-group">
+                        <div class="btn-group-vertical item-control" role="group">
+                          <button type="button" class="btn btn-default" (click)="onAddInvoiceItem(i)">
+                            <span class="fa fa-plus"></span>
+                          </button>
+                          <button type="button" class="btn btn-default" (click)="onDuplicateInvoiceItem(i)">
+                            <span class="fa fa-copy"></span>
+                          </button>
+                          <button type="button" class="btn btn-default" (click)="onDeleteInvoiceItem(i)">
+                            <span class="fa fa-times"></span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="item-description-div">
+                      <div class="form-group">
+                        <label class="control-label" for="{{ 'item' + i  + 'Description'}}">{{ 'Item ' + (i+1)}}</label>
+                        <textarea id="{{ 'item' + i  + 'Description'}}"
+                                  formControlName="description"
+                                  class="form-control item-description" rows="4" style="resize: none;"></textarea>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-md-1 col-sm-2 col-xs-4">
-                  <div class="form-group text-right">
-                    <label class="control-label" for="{{ 'item' + i + 'hsn'}}">HSN</label>
-                    <input type="text" id="{{ 'item' + i + 'hsn'}}"
-                           formControlName="hsn"
-                           class="form-control text-right">
-                  </div>
-                </div>
-                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left">
-                  <div class="form-group text-right">
-                    <label class="control-label" for="{{ 'item' + i + 'Quantity'}}">Quantity</label>
-                    <input type="number" id="{{ 'item' + i + 'Quantity'}}"
-                           formControlName="quantity"
-                           class="form-control text-right">
-                  </div>
-                </div>
-                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left">
-                  <div class="form-group text-right">
-                    <label class="control-label" for="{{ 'item' + i + 'UnitPrice'}}">Unit Price</label>
-                    <input type="number" id="{{ 'item' + i + 'UnitPrice'}}"
-                           formControlName="unitPrice"
-                           class="form-control text-right">
-                  </div>
-                </div>
-                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left hidden-xs">
-                  <div class="form-group text-right">
-                    <label class="control-label" for="{{ 'item' + i + 'Amount'}}">Amount</label>
-                    <input type="text" id="{{ 'item' + i + 'Amount'}}"
-                           [value]="invoiceItem.get('amount').value | number: '1.0-0'"
-                           class="form-control text-right"
-                           readonly disabled>
-                  </div>
-                </div>
-                <div class="col-md-1 col-sm-2 col-xs-4">
-                  <div class="form-group text-right">
-                    <label class="control-label" for="{{ 'item' + i + 'cgst'}}">CGST</label>
-                    <input type="number" id="{{ 'item' + i + 'cgst'}}"
-                           formControlName="cgst"
-                           class="form-control text-right">
-                  </div>
-                </div>
-                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left">
-                  <div class="form-group text-right">
-                    <label class="control-label" for="{{ 'item' + i + 'sgst'}}">SGST</label>
-                    <input type="number" id="{{ 'item' + i + 'sgst'}}"
-                           formControlName="sgst"
-                           class="form-control text-right">
-                  </div>
-                </div>
-                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left">
-                  <div class="form-group text-right">
-                    <label class="control-label" for="{{ 'item' + i + 'igst'}}">IGST</label>
-                    <input type="number" id="{{ 'item' + i + 'igst'}}"
-                           formControlName="igst"
-                           class="form-control text-right">
-                  </div>
-                </div>
-                <div class="col-md-1 col-sm-2 col-xs-4 xs-clear-padding-left hidden-xs">
-                  <div class="form-group text-right">
-                    <label class="control-label" for="{{ 'item' + i + 'tax'}}">Total Tax</label>
-                    <input type="text" id="{{ 'item' + i + 'tax'}}"
-                           [value]="invoiceItem.get('itemTax').value | number: '1.2-2'"
-                           class="form-control text-right"
-                           readonly disabled>
-                  </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                  <div class="form-group">
-                    <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-default" (click)="onAddInvoiceItem(i)"><span
-                        class="fa fa-plus"></span> Add
-                      </button>
-                      <button type="button" class="btn btn-default" (click)="onDuplicateInvoiceItem(i)"><span
-                        class="fa fa-copy"></span> Duplicate
-                      </button>
-                      <button type="button" class="btn btn-default" (click)="onDeleteInvoiceItem(i)"><span
-                        class="fa fa-times"></span> Delete
-                      </button>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-sm-3 col-xs-4">
+                      <div class="form-group text-right">
+                        <label class="control-label" for="{{ 'item' + i + 'hsn'}}">HSN</label>
+                        <input type="text" id="{{ 'item' + i + 'hsn'}}"
+                               formControlName="hsn"
+                               class="form-control text-right">
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-4 xs-clear-padding-left">
+                      <div class="form-group text-right">
+                        <label class="control-label" for="{{ 'item' + i + 'Quantity'}}">Quantity</label>
+                        <input type="number" id="{{ 'item' + i + 'Quantity'}}"
+                               formControlName="quantity"
+                               class="form-control text-right">
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-4 xs-clear-padding-left">
+                      <div class="form-group text-right">
+                        <label class="control-label" for="{{ 'item' + i + 'UnitPrice'}}">Unit Price</label>
+                        <input type="number" id="{{ 'item' + i + 'UnitPrice'}}"
+                               formControlName="unitPrice"
+                               class="form-control text-right">
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-4 xs-clear-padding-left hidden-xs">
+                      <div class="form-group text-right">
+                        <label class="control-label" for="{{ 'item' + i + 'Amount'}}">Amount</label>
+                        <input type="text" id="{{ 'item' + i + 'Amount'}}"
+                               [value]="invoiceItem.get('amount').value | number: '1.0-0'"
+                               class="form-control text-right"
+                               readonly disabled>
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-4">
+                      <div class="form-group text-right">
+                        <label class="control-label" for="{{ 'item' + i + 'cgst'}}">CGST</label>
+                        <input type="number" id="{{ 'item' + i + 'cgst'}}"
+                               formControlName="cgst"
+                               class="form-control text-right">
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-4 xs-clear-padding-left">
+                      <div class="form-group text-right">
+                        <label class="control-label" for="{{ 'item' + i + 'sgst'}}">SGST</label>
+                        <input type="number" id="{{ 'item' + i + 'sgst'}}"
+                               formControlName="sgst"
+                               class="form-control text-right">
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-4 xs-clear-padding-left">
+                      <div class="form-group text-right">
+                        <label class="control-label" for="{{ 'item' + i + 'igst'}}">IGST</label>
+                        <input type="number" id="{{ 'item' + i + 'igst'}}"
+                               formControlName="igst"
+                               class="form-control text-right">
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-4 xs-clear-padding-left hidden-xs">
+                      <div class="form-group text-right">
+                        <label class="control-label" for="{{ 'item' + i + 'tax'}}">Total Tax</label>
+                        <input type="text" id="{{ 'item' + i + 'tax'}}"
+                               [value]="invoiceItem.get('itemTax').value | number: '1.2-2'"
+                               class="form-control text-right"
+                               readonly disabled>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -240,7 +265,7 @@
             <label class="col-sm-6 control-label" for="amount">Total Amount</label>
             <div class="col-sm-6">
               <!--<app-formatted-readonly-number id="amount"-->
-                                             <!--formControlName="amount" [format]="'1.2-2'"></app-formatted-readonly-number>-->
+              <!--formControlName="amount" [format]="'1.2-2'"></app-formatted-readonly-number>-->
               <input type="text" id="amount"
                      [value]="invoiceForm.get('amount').value | number: '1.2-2'"
                      class="form-control text-right"
@@ -251,7 +276,7 @@
             <label class="col-sm-6 control-label" for="totalGSTValue">GST</label>
             <div class="col-sm-6">
               <!--<app-formatted-readonly-number id="totalGSTValue"-->
-                                             <!--formControlName="totalGSTValue" [format]="'1.2-2'"></app-formatted-readonly-number>-->
+              <!--formControlName="totalGSTValue" [format]="'1.2-2'"></app-formatted-readonly-number>-->
               <input type="text" id="totalGSTValue"
                      [value]="invoiceForm.get('totalGSTValue').value | number: '1.2-2'"
                      class="form-control text-right"
@@ -262,7 +287,7 @@
             <label class="col-sm-6 control-label" for="grandTotal">Grand Total</label>
             <div class="col-sm-6">
               <!--<app-formatted-readonly-number id="grandTotal"-->
-                                             <!--formControlName="grandTotal" [format]="'1.2-2'"></app-formatted-readonly-number>-->
+              <!--formControlName="grandTotal" [format]="'1.2-2'"></app-formatted-readonly-number>-->
               <input type="text" id="grandTotal"
                      [value]="invoiceForm.get('grandTotal').value | number: '1.2-2'"
                      class="form-control text-right"
@@ -276,7 +301,8 @@
       </form>
       <div class="col-md-4 col-md-pull-4 col-sm-6" style="padding-top: 15px;">
         <!--<button type="submit" class="btn btn-primary">Save</button>-->
-        <button type="button" class="btn btn-primary" [disabled]="!invoiceService.active || invoiceForm.dirty" (click)="onPrint()">Print
+        <button type="button" class="btn btn-primary" [disabled]="!invoiceService.active || invoiceForm.dirty"
+                (click)="onPrint()">Print
         </button>
         <div class="checkbox">
           <label>
@@ -297,7 +323,8 @@
         </div>
       </div>
       <div class="clearfix"></div>
-      <app-invoice-gst-print #previewtax [invoice]="invoiceService.active" [fullRounding]="fullRounding" [copies]="copies"></app-invoice-gst-print>
+      <app-invoice-gst-print #previewtax [invoice]="invoiceService.active" [fullRounding]="fullRounding"
+                             [copies]="copies"></app-invoice-gst-print>
     </div>
   </div>
 </div>

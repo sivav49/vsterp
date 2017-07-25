@@ -1,8 +1,9 @@
-
 import {Observable} from 'rxjs/Observable';
 
 import {Invoice} from './invoice.model';
+import {Client} from '../client/client.model';
 import {InvoiceService} from './invoice-service';
+import {ClientService} from '../client/client.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {OnInit} from '@angular/core';
@@ -14,30 +15,29 @@ export enum EditorMode {
   Edit
 }
 
-export class InvoiceEditor<T extends Invoice>  implements OnInit  {
+export class InvoiceEditor<T extends Invoice>  implements OnInit {
 
+  protected basePath = '';
   protected mode = EditorMode.None;
 
   public copies = 3;
   public invoiceForm: FormGroup;
+  public clientList: Client[];
 
   constructor(public invoiceService: InvoiceService<T>,
+              public clientService: ClientService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               protected fb: FormBuilder) {
-    this.createForm();
+
   }
 
   ngOnInit() {
     this.activatedRoute.data
       .subscribe(
         data => {
-          this.mode = data.mode;
-          this.invoiceService.active = undefined;
-          if (this.mode === EditorMode.Edit || this.mode === EditorMode.View) {
-            this.setInvoiceForm(data.invoice);
-            this.invoiceService.active = data.invoice;
-          }
+          this.clientList = data.clients;
+          this.reloadForm(data.invoice, data.mode);
         }
       );
   }
@@ -48,25 +48,20 @@ export class InvoiceEditor<T extends Invoice>  implements OnInit  {
       serviceCall = this.invoiceService.create(invoice);
       serviceCall.subscribe(
         (data: T) => {
-          this.router.navigate(['../', data._id, 'edit'], {relativeTo: this.activatedRoute}).then();
+          this.router.navigate([this.basePath, data._id, 'edit']).then();
         }
       );
     } else if (this.mode === EditorMode.Edit) {
       serviceCall = this.invoiceService.update(this.invoiceService.active._id, invoice);
       serviceCall.subscribe(
-        (data) => {
-          this.invoiceForm.reset();
-          this.setInvoiceForm(data);
+        (data: T) => {
+          this.reloadForm(data, this.mode);
         }
       );
     }
   }
 
-  protected  createForm() {
-
-  }
-
-  protected setInvoiceForm(invoice: T) {
+  protected  createForm(invoice?: T) {
 
   }
 
@@ -116,6 +111,17 @@ export class InvoiceEditor<T extends Invoice>  implements OnInit  {
       alert('unsaved changes');
     } else {
       this.router.navigate(['../', id], {relativeTo: this.activatedRoute}).then();
+    }
+  }
+
+  private reloadForm(invoice, mode) {
+    this.mode = mode;
+    this.invoiceService.active = undefined;
+    if (this.mode === EditorMode.Edit || this.mode === EditorMode.View) {
+      this.createForm(invoice);
+      this.invoiceService.active = invoice;
+    } else {
+      this.createForm();
     }
   }
 }

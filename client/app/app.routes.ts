@@ -4,16 +4,11 @@ import {BasicLayoutComponent} from './view/basic-layout/basic-layout.component';
 import {DashboardComponent} from './view/dashboard/dashboard.component';
 import {PageNotFoundComponent} from './view/page-not-found/page-not-found.component';
 
-// import {InvoiceComponent} from './core/invoice/invoice.component';
-// import {InvoiceEditorComponInvoiceGstServiceent} from './core/invoice/invoice-editor/invoice-editor.component';
-// import {InvoiceListingComponent} from './core/invoice/invoice-listing/invoice-listing.component';
-// import {InvoiceGetResolve} from './core/invoice/invoice.service';
-
 import {ClientComponent} from './core/client/client.component';
 import {ClientListingComponent} from './core/client/client-listing/client-listing.component';
 import {ClientEditorComponent} from './core/client/client-editor/client-editor.component';
 import {ClientDetailsComponent} from './core/client/client-details/client-details.component';
-import {ClientGetResolve} from './core/client/client.service';
+import {ClientGetAllResolve, ClientGetResolve} from './core/client/client.service';
 
 import {InvoiceVatComponent} from './core/invoice/vat/invoice-vat.component';
 import {InvoiceVatListComponent} from './core/invoice/vat/invoice-vat-list/invoice-vat-list.component';
@@ -35,37 +30,6 @@ export const ROUTES: Routes = [{
 }, {
   path: '', component: BasicLayoutComponent,
   children: [
-    //   {
-    //   path: 'invoices', component: InvoiceComponent,
-    //   children: [{
-    //     path: '', component: InvoiceListingComponent
-    //   }, {
-    //     path: 'create',
-    //     component: InvoiceEditorComponent,
-    //     data: {
-    //       mode: EditorMode.Create
-    //     }
-    //   }, {
-    //     path: ':id',
-    //     component: InvoiceEditorComponent,
-    //     data: {
-    //       mode: EditorMode.View,
-    //     },
-    //     resolve: {
-    //       invoice: InvoiceGetResolve
-    //     }
-    //   }, {
-    //     path: ':id/edit',
-    //     component: InvoiceEditorComponent,
-    //     data: {
-    //       mode: EditorMode.Edit
-    //     },
-    //     resolve: {
-    //       invoice: InvoiceGetResolve
-    //     }
-    //   }
-    //   ]
-    // },
     {
       path: 'invoice-vat', component: InvoiceVatComponent,
       children: [{
@@ -106,6 +70,9 @@ export const ROUTES: Routes = [{
         component: InvoiceGstEditorComponent,
         data: {
           mode: EditorMode.Create
+        },
+        resolve: {
+          clients: ClientGetAllResolve
         }
       }, {
         path: ':id',
@@ -114,7 +81,8 @@ export const ROUTES: Routes = [{
           mode: EditorMode.View,
         },
         resolve: {
-          invoice: InvoiceGstGetResolve
+          invoice: InvoiceGstGetResolve,
+          clients: ClientGetAllResolve
         }
       }, {
         path: ':id/edit',
@@ -123,7 +91,8 @@ export const ROUTES: Routes = [{
           mode: EditorMode.Edit
         },
         resolve: {
-          invoice: InvoiceGstGetResolve
+          invoice: InvoiceGstGetResolve,
+          clients: ClientGetAllResolve
         }
       }
       ]
@@ -137,6 +106,9 @@ export const ROUTES: Routes = [{
         component: InvoiceBosEditorComponent,
         data: {
           mode: EditorMode.Create
+        },
+        resolve: {
+          clients: ClientGetAllResolve
         }
       }, {
         path: ':id',
@@ -145,7 +117,8 @@ export const ROUTES: Routes = [{
           mode: EditorMode.View,
         },
         resolve: {
-          invoice: InvoiceBosGetResolve
+          invoice: InvoiceBosGetResolve,
+          clients: ClientGetAllResolve
         }
       }, {
         path: ':id/edit',
@@ -154,7 +127,8 @@ export const ROUTES: Routes = [{
           mode: EditorMode.Edit
         },
         resolve: {
-          invoice: InvoiceBosGetResolve
+          invoice: InvoiceBosGetResolve,
+          clients: ClientGetAllResolve
         }
       }
       ]
