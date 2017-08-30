@@ -14,7 +14,7 @@ import {InvoiceService} from '../invoice-service';
 
 @Injectable()
 export class InvoiceVatService extends InvoiceService<InvoiceVat> {
-  protected apiUrl = 'http://192.168.1.104:4300/api/invoices';
+  protected apiUrl = 'http://192.168.0.100:4300/api/invoices';
 
   constructor(http: Http,
               toastr: ToastsManager,

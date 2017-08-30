@@ -17,7 +17,7 @@ import {PopupService, ConfirmationResult} from '../../shared/popup.service';
 
 @Injectable()
 export class ClientService {
-  private apiUrl = 'http://192.168.1.104:4300/api/clients';
+  private apiUrl = 'http://192.168.0.100:4300/api/clients';
 
   public activeClient: Client;
 

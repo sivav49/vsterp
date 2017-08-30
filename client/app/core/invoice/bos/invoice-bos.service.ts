@@ -14,7 +14,7 @@ import {InvoiceService} from '../invoice-service';
 
 @Injectable()
 export class InvoiceBosService extends InvoiceService<InvoiceBos> {
-  protected apiUrl = 'http://192.168.1.104:4300/api/invoice-bos';
+  protected apiUrl = 'http://192.168.0.100:4300/api/invoice-bos';
 
   protected extractData(res: Response): InvoiceBos[] | InvoiceBos {
     const data = super.extractData(res);

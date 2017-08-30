@@ -14,7 +14,7 @@ import {InvoiceService} from '../invoice-service';
 
 @Injectable()
 export class InvoiceGstService extends InvoiceService<InvoiceGst> {
-  protected apiUrl = 'http://192.168.1.104:4300/api/invoice-gst';
+  protected apiUrl = 'http://192.168.0.100:4300/api/invoice-gst';
 
   protected extractData(res: Response): InvoiceGst[] | InvoiceGst {
     const data = super.extractData(res);
